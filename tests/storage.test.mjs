@@ -1,0 +1,12 @@
+import 'fake-indexeddb/auto';
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {saveWorkspace,loadWorkspace,backupEnvelope,validateEnvelope} from '../lib/storage.mjs';
+import {createSeed} from '../lib/sql/seed.mjs';
+import {Engine,validateState} from '../lib/sql/engine.mjs';
+const fresh=()=>({version:1,db:createSeed(),tabs:[{id:'t1',name:'草稿.sql',sql:'SELECT 1;'}],activeTab:'t1',history:[],progress:{1:true},lessonDrafts:{2:'SELECT name,city FROM customers;'},theme:'dark'});
+test('IndexedDB 自动保存、刷新等价重新读取与草稿进度恢复',async()=>{const w=fresh(),e=new Engine(w.db);e.executeScript("UPDATE customers SET city='北京' WHERE id=1;");w.db=e.state;await saveWorkspace(w);const restored=await loadWorkspace();assert.deepEqual(restored,w);assert.equal(restored.db.databases.finance_lab.tables.customers.rows[0].city,'北京');assert.equal(restored.tabs[0].sql,'SELECT 1;');assert.equal(restored.progress[1],true);assert.equal(restored.lessonDrafts[2],'SELECT name,city FROM customers;');});
+test('完整备份导出再导入恢复',async()=>{const w=fresh(),text=JSON.stringify(backupEnvelope(w)),restored=validateEnvelope(JSON.parse(text));restored.db=validateState(restored.db);await saveWorkspace(restored);assert.deepEqual(await loadWorkspace(),w);});
+test('失败恢复不修改原工作台',async()=>{const w=await loadWorkspace(),broken=JSON.parse(JSON.stringify(backupEnvelope(w)));broken.workspace.tabs=[];assert.throws(()=>validateEnvelope(broken));assert.deepEqual(await loadWorkspace(),w);});
+test('连续保存按提交顺序执行且无共享引用覆盖',async()=>{const w=fresh(),first=saveWorkspace(w);w.tabs[0].sql='SELECT 2;';const second=saveWorkspace(w);w.tabs[0].sql='SELECT 3;';await Promise.all([first,second]);assert.equal((await loadWorkspace()).tabs[0].sql,'SELECT 2;');});
+test('恢复示例只替换两个示例库并保留自建库',async()=>{const w=fresh();const e=new Engine(w.db);e.executeScript("UPDATE customers SET name='用户改动' WHERE id=1; CREATE DATABASE my_data;");const seed=createSeed();w.db={...e.state,current:'finance_lab',databases:{...e.state.databases,...seed.databases}};await saveWorkspace(w);const r=await loadWorkspace();assert.equal(r.db.databases.finance_lab.tables.customers.rows[0].name,'晨光商贸');assert.ok(r.db.databases.my_data);});
