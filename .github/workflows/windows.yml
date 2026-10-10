@@ -1,0 +1,79 @@
+name: Windows installer
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'desktop/**'
+      - 'app/**'
+      - 'components/**'
+      - 'lib/**'
+      - 'package*.json'
+      - 'electron-builder.yml'
+      - '.github/workflows/windows.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-installer
+  cancel-in-progress: false
+
+jobs:
+  build-test-release:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run dist:windows
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - name: Install and test packaged application
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem release/SQL-Lab-Setup-*.exe | Select-Object -First 1
+          $installPath = Join-Path $env:RUNNER_TEMP 'sql-lab-install'
+          $setup = Start-Process -FilePath $installer.FullName -ArgumentList @('/S', "/D=$installPath") -Wait -PassThru
+          if ($setup.ExitCode -ne 0) { throw "Installer failed: $($setup.ExitCode)" }
+          $exe = Join-Path $installPath 'SQL LAB.exe'
+          if (!(Test-Path $exe)) { throw 'Installed executable missing' }
+          $report = Join-Path $env:GITHUB_WORKSPACE 'release/desktop-smoke.json'
+          $app = Start-Process -FilePath $exe -ArgumentList @('--smoke-test', "--smoke-report=$report") -PassThru
+          if (!$app.WaitForExit(120000)) { $app.Kill(); throw 'Desktop smoke test timed out' }
+          if ($app.ExitCode -ne 0) { if (Test-Path $report) { Get-Content $report }; throw 'Desktop smoke test failed' }
+          $result = Get-Content $report -Raw | ConvertFrom-Json
+          if ($result.fail -ne 0 -or $result.pass -ne 8) { throw 'Incomplete desktop smoke checks' }
+          $hash = (Get-FileHash $installer.FullName -Algorithm SHA256).Hash.ToLower()
+          "$hash  $($installer.Name)" | Set-Content release/SHA256SUMS.txt -Encoding utf8NoBOM
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-installer-and-checks
+          path: |
+            release/SQL-Lab-Setup-*.exe
+            release/SHA256SUMS.txt
+            release/desktop-smoke.json
+            release/desktop-smoke.png
+      - name: Publish verified installer
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = (Get-Content desktop/package.json -Raw | ConvertFrom-Json).version
+          $tag = "v$version"
+          gh release view $tag --repo $env:GITHUB_REPOSITORY *> $null
+          if ($LASTEXITCODE -ne 0) {
+            gh release create $tag --repo $env:GITHUB_REPOSITORY --title "SQL LAB $version · Windows" --target $env:GITHUB_SHA --notes-file desktop/release-notes.md
+            if ($LASTEXITCODE -ne 0) { throw 'Release creation failed' }
+          }
+          gh release upload $tag release/SQL-Lab-Setup-*.exe release/SHA256SUMS.txt release/desktop-smoke.json --repo $env:GITHUB_REPOSITORY --clobber
+          if ($LASTEXITCODE -ne 0) { throw 'Installer upload failed' }

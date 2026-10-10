@@ -1,5 +1,8 @@
 node_modules/
 dist/
+release/
+desktop/ui/
+desktop/licenses/
 coverage/
 tests/.cache/
 tests/*-results.txt

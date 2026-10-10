@@ -1,0 +1,30 @@
+appId: io.sqllab.desktop
+productName: SQL LAB
+directories:
+  app: desktop
+  output: release
+  buildResources: desktop
+files:
+  - '**/*'
+  - '!prepare.mjs'
+  - '!release-notes.md'
+asar: true
+npmRebuild: false
+copyright: Copyright © 2026 MarikoAkina
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: desktop/icon.ico
+  artifactName: SQL-Lab-Setup-${version}.exe
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: SQL LAB
+  runAfterFinish: false
+  deleteAppDataOnUninstall: false
+  installerLanguages: [zh_CN, en_US]
+publish: null
