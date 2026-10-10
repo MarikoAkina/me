@@ -1,0 +1,36 @@
+name: 功能或教学建议
+description: 建议新的练习、SQL 能力、手机操作或文档改进。
+title: "[建议] "
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: 建议方向
+      options:
+        - SQL 兼容与正确性
+        - 财务案例或学习练习
+        - 手机输入与结果操作
+        - 数据保存与备份
+        - Windows 安装版
+        - 文档与仓库导航
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: 希望解决的问题
+      description: 描述你在学习或使用中遇到的具体困难。
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建议的行为或内容
+      description: 说明改进后如何操作、看到什么结果，或希望增加怎样的教学案例。
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: 示例或参考
+      description: 可以提供虚构数据、SQL、截图或参考链接；没有时可留空。

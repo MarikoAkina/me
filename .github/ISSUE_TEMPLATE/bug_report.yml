@@ -1,0 +1,63 @@
+name: 错误报告
+description: 报告 SQL 结果、数据保存、手机界面或安装程序的问题。
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请先查看 [SQL 支持范围](https://github.com/MarikoAkina/sql-lab/blob/main/docs/sql-compatibility.md)。
+        用虚构数据提供最小示例，不要上传真实客户、财务资料或个人信息。
+  - type: input
+    id: version
+    attributes:
+      label: 版本或提交
+      description: 安装版填写版本号；网页实例可填写部署版本或提交。
+      placeholder: "例如：Windows 0.2.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: usage
+    attributes:
+      label: 使用方式
+      options:
+        - Windows 安装版
+        - 手机网页
+        - 电脑或平板网页
+        - 本地开发环境
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: 设备、系统与浏览器
+      placeholder: "例如：iPhone / iOS 版本 / Safari，或 Windows 11 x64"
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤
+      description: 描述从打开工作台到出现问题的操作；界面问题可附处理后的截图。
+      placeholder: "1. 打开……\n2. 输入或点击……\n3. 出现……"
+    validations:
+      required: true
+  - type: textarea
+    id: sql
+    attributes:
+      label: 最小 SQL 示例
+      description: SQL 问题请包含必要的建表、示例数据和失败语句；非 SQL 问题可留空。
+      render: sql
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期结果
+      description: 说明正确的查询结果、数据变化或界面行为。
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际结果与错误信息
+      description: 粘贴错误码、问题位置、结果或保存失败提示。
+    validations:
+      required: true

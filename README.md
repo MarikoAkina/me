@@ -1,146 +1,133 @@
-# SQL LAB · MySQL 基础学习模拟器
+<p align="center">
+  <img src="public/icon-192.png" width="72" height="72" alt="SQL LAB 图标">
+</p>
 
-这是面向财务管理零基础学习者的手机 SQL 练习工作台。无需连接外部数据库服务器。
+# SQL LAB
 
-## Windows 安装
+**面向零基础与财务管理学习者的中文 MySQL 基础练习工作台。**
 
-前往 [Windows 安装包下载页](https://github.com/MarikoAkina/sql-lab/releases/tag/v0.2.1)，下载 `SQL-Lab-Setup-0.2.1.exe`。支持 Windows 10 / 11 的 x64 电脑；按安装向导选择位置，完成后从桌面或开始菜单打开 SQL LAB。
+在手机上写 SQL、查看结果、完成练习；也可以安装 Windows 离线版。数据库、草稿和学习进度保存在本地，执行与批改无需外部数据库服务器或 AI API。
 
-安装后无需数据库、Node.js 或账号，SQL 练习可离线进行。安装包暂未使用 Authenticode 发布者证书，Windows 可能显示“未知发布者”；发布页提供 `SHA256SUMS.txt` 可核验完整性。
+[![Checks](https://github.com/MarikoAkina/sql-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/MarikoAkina/sql-lab/actions/workflows/ci.yml)
+[![Windows installer](https://github.com/MarikoAkina/sql-lab/actions/workflows/windows.yml/badge.svg)](https://github.com/MarikoAkina/sql-lab/actions/workflows/windows.yml)
+[版本与安装包](https://github.com/MarikoAkina/sql-lab/releases/latest) · [MIT License](LICENSE)
 
-桌面版数据位于本机 `%APPDATA%\SQL LAB`，网页版数据位于相应浏览器。通过“数据与备份”导出、恢复完整 JSON 可迁移数据库、草稿、历史和学习进度。升级沿用原数据；卸载不会自动清除练习数据，仍建议定期备份。
+**[下载 Windows 安装版](https://github.com/MarikoAkina/sql-lab/releases/latest)** · **[阅读新手指南](docs/getting-started.md)** · **[打开文档目录](docs/README.md)**
 
-桌面版支持原生窗口、菜单、剪切／复制／粘贴与缩放。帮助菜单可打开项目下载页。站点顶部的“Windows 安装版”和“数据与备份”面板都提供安装下载入口。
+> SQL LAB 是基础学习模拟器，兼容目标为 MySQL 8.4 的部分基础语法。字符串比较、类型转换、分组与自增等行为仍有差异，详见 [SQL 支持范围与兼容限制](docs/sql-compatibility.md)。
 
-## 本地运行
+## 页面导航
 
-需要 Node.js 22.13 或更高版本，以及 npm。首次安装后直接启动，无需配置数据库或密钥。
+- [开始使用](#开始使用)
+- [第一条 SQL](#第一条-sql)
+- [功能概览](#功能概览)
+- [学习路线](#学习路线)
+- [文档目录](#文档目录)
+- [源码目录](#源码目录)
+- [验证状态](#验证状态)
+- [参与项目](#参与项目)
 
-```bash
-git clone https://github.com/MarikoAkina/sql-lab.git sql-lab
-cd sql-lab
-npm ci
-npm run dev
-```
+## 开始使用
 
-打开终端提示的本地网址。若需用同一局域网的手机访问：
+| 使用方式 | 入口 | 说明 |
+| --- | --- | --- |
+| Windows 安装版 | [下载最新发布版本](https://github.com/MarikoAkina/sql-lab/releases/latest) | Windows 10 / 11 x64；安装后可离线练习，无需 Node.js、MySQL 或账号 |
+| 手机与电脑网页 | [本地运行与部署指南](docs/development.md) | 使用现代浏览器；支持手机、平板与桌面布局，可自行部署为静态网站 |
 
-```bash
-npm run dev -- --host 0.0.0.0
-```
+当前 Windows 版本为 **0.2.1**。下载 `SQL-Lab-Setup-0.2.1.exe`，按向导安装并打开 SQL LAB。安装包暂未使用发布者证书，Windows 可能显示“未知发布者”；[发布页](https://github.com/MarikoAkina/sql-lab/releases/tag/v0.2.1)提供 SHA256 校验文件与安装检查报告。
 
-手机打开电脑的局域网 IP 与终端显示的端口。开发服务器仅供本地开发。
+<details>
+<summary>现有网页站点的访问说明</summary>
 
-```bash
-npm test
-npm run build
-npm run preview
-```
+[已部署站点](https://mysql-foundry.marikoakina.chatgpt.site)当前仅向维护者开放，并非公开在线演示。其他用户可使用 Windows 安装版，或按部署指南运行自己的网页实例。
 
-生产部署时将 `dist/` 目录放在静态网站服务的根路径，通过 HTTPS 访问；浏览器须支持 Web Worker、IndexedDB 和现代 JavaScript。`npm start` 是本地构建预览，并非生产服务器。支持子路径部署时，需统一配置 Vite 的 `base` 与 HTML、manifest 中以 `/` 开头的资源路径。
+</details>
 
-## 入门
+## 第一条 SQL
 
-站点默认选择 `finance_lab`。输入并执行：
+首次打开时，工作台已选择财务示例库 `finance_lab`。在编辑器输入下面的语句，点击 **执行 SQL**：
 
 ```sql
 SELECT * FROM customers;
-SELECT name, city FROM customers WHERE city = '武汉';
 ```
 
-第一条返回 5 位客户，第二条返回武汉的 3 位客户。切换到“学习练习”按顺序完成 15 题，提示分步展开，参考答案默认折叠。查询批改比较实际结果；写入与建表练习在独立数据中检查最终状态。
+初始数据会返回 5 位客户。接着只查看武汉客户的姓名和城市：
 
-## 实现
+```sql
+SELECT name, city
+FROM customers
+WHERE city = '武汉';
+```
 
-- React / Vite 静态客户端应用，可部署到任意静态网站托管服务。
-- node-sql-parser MySQL AST；自有结构化关系执行器，禁止依赖拼接正则模拟查询。
-- decimal.js 80 位十进制运算。列 DECIMAL(p,s) 精度上限 65，小数位上限 30。
-- SQL 在 Web Worker 中执行。每条写入先校验副本，失败回退。批量执行保留此前成功结果；文件导入整体回退。
-- CodeMirror SQL 编辑器，行号、高亮、补全、格式化、触控选择、符号辅助、撤销与重做。
-- IndexedDB 自动保存数据库、脚本草稿、历史和学习记录。首次初始化示例库，刷新不会重新播种。
+初始数据会返回 3 行。`SELECT` 选择要看的列，`FROM` 指定表，`WHERE` 筛选记录。查询不会修改数据；以上行数以尚未修改的示例库为准。
 
-## 首版语法
+切换到 **学习练习**，从第 1 题开始。每题都有目标、表结构、分步提示和折叠的参考答案，点击 **执行并批改** 检查结果。[继续阅读新手指南 →](docs/getting-started.md)
 
-数据库：CREATE / DROP DATABASE（IF NOT EXISTS / IF EXISTS）、SHOW DATABASES、USE。
+## 功能概览
 
-表：CREATE / DROP TABLE、SHOW TABLES、DESC / DESCRIBE，ALTER TABLE ADD / MODIFY / DROP COLUMN。单列 PRIMARY KEY / UNIQUE、NOT NULL、常量 DEFAULT、INT 主键 AUTO_INCREMENT。
+| 能力 | 当前实现 |
+| --- | --- |
+| 数据库工作台 | Schemas 树、字段类型与主键标记、表数据与结构浏览、多标签 SQL 编辑器 |
+| 编辑与执行 | 行号、高亮、基础补全、格式化；执行选中内容、当前语句或全部语句；多结果集与执行日志 |
+| 手机操作 | 数据库／编辑器／结果／历史导航，全屏编辑、SQL 符号与关键词辅助栏，结果区域横向滚动 |
+| 基础 SQL | 建库建表、修改表、增删改、筛选与分页、聚合分组、两表连接和基础非关联子查询 |
+| 财务示例 | 客户、订单、费用与预算练习；金额使用十进制计算，保留 NULL、重复值和未匹配记录 |
+| 学习与批改 | 15 道渐进练习；查询比较实际结果，写入练习检查独立数据副本的最终状态 |
+| 保存与迁移 | IndexedDB 自动保存、完整 JSON 备份与恢复、SQL 脚本导入导出、结果复制与 CSV 导出 |
+| Windows 离线版 | 与网页共用前端和 SQL 引擎，提供安装程序、原生菜单与本地数据保存 |
 
-类型：INT、INTEGER、VARCHAR(n)、TEXT、DECIMAL(p,s)、DATE、DATETIME。
+SQL 使用 **node-sql-parser 的 MySQL AST 与自有结构化执行器**，金额使用 **decimal.js**，执行任务放在 **Web Worker** 中。支持语法、行为差异与容量上限集中说明在 [兼容文档](docs/sql-compatibility.md)。
 
-写入：指定列和多行 INSERT VALUES，单表 UPDATE SET WHERE，DELETE FROM WHERE，TRUNCATE TABLE。
+## 学习路线
 
-查询：SELECT * / 指定列 / 常量与算术 / AS / DISTINCT；WHERE 比较、AND / OR / NOT、括号、BETWEEN、IN、LIKE（% 与 _）、IS NULL；多列 ORDER BY；三种 LIMIT / OFFSET；COUNT / SUM / AVG / MAX / MIN、GROUP BY、HAVING；两表 INNER / LEFT JOIN ON、别名；非关联 IN 子查询与标量子查询；ROUND / IFNULL / CONCAT / UPPER / LOWER。
+| 阶段 | 练习 | 目标 |
+| --- | --- | --- |
+| 读取数据 | 1–2 | 全表查询与选择列 |
+| 筛选与排序 | 3–6 | 条件、金额区间、排序、分页、去重与 NULL |
+| 统计分析 | 7–9 | COUNT、金额汇总、GROUP BY 与 HAVING |
+| 多表查询 | 10–11 | LEFT JOIN 与基础子查询 |
+| 修改数据 | 12–14 | INSERT、UPDATE、DELETE 与影响范围 |
+| 数据库设计 | 15 | 主键、字段类型、非空约束、默认值与预算表 |
 
-输入：关键字不区分大小写；中文、单引号转义、反引号、--（需空白）、# 与 /* */ 注释；词法扫描识别字符串中的分号。
+示例库包含 `finance_lab`（客户、订单、费用）和 `campus_lab`（学生成绩）。工作台修改会自动保存；学习练习使用独立数据，支持重新开始。
 
-## 兼容限制
+## 文档目录
 
-产品明确标为基础学习模拟器，不是真正 MySQL 服务器。数据库、表、列与别名统一不区分大小写；字符串比较区分大小写，按 Unicode 值比较，不模拟 MySQL 默认语言排序规则、重音和尾空格规则。严格写入与转换，不隐式把非数字文本当作 0；INT 不自动舍入。DECIMAL 写入四舍五入，计算返回精度与显示尺度可能不同。严格 GROUP BY，不推导主键函数依赖或 WHERE 单值依赖，不支持 GROUP BY 序号。日期不支持时区、零日期和微秒。失败写入也回退自增计数器，与 InnoDB 的编号消耗存在差异。
+| 文档 | 解决的问题 |
+| --- | --- |
+| [新手与手机指南](docs/getting-started.md) | 如何写第一条 SQL、操作结果表、使用练习和手机输入辅助 |
+| [数据、备份与恢复](docs/data-and-backup.md) | 数据保存在哪里，如何迁移、导入脚本和恢复示例库 |
+| [SQL 支持范围与兼容限制](docs/sql-compatibility.md) | 哪些语法能用，与 MySQL 的行为有哪些差异 |
+| [开发、构建与部署](docs/development.md) | 如何运行源码、构建网页、开发和打包 Windows 版 |
+| [测试与验收](docs/testing.md) | 自动化检查覆盖什么，哪些实机验证仍未完成 |
+| [贡献指南](CONTRIBUTING.md) | 如何反馈问题、补充练习和提交修改 |
 
-尚未实现视图、索引管理、外键、事务、复合约束、CHECK、触发器、权限、存储过程、CTE、UNION、窗口函数、关联子查询、RIGHT / CROSS JOIN、派生表、INSERT SELECT、UPDATE / DELETE 的 ORDER BY / LIMIT 等扩展。有效但未支持的 AST 返回 SIM_UNSUPPORTED；语法错误返回中文解释与错误位置。可明确对应时使用 MySQL 错误码。
-
-容量：20 库、每库 50 表、每表 10,000 行；每批 100 条语句，脚本 200 KB；单条最多 3 秒或 200 万步。结果和 JOIN 中间结果限制 10,000 行；界面每页 100 行。JSON 备份最多 20 MB。
-
-## 保存、备份与恢复
-
-数据保存在当前浏览器 IndexedDB，不会跨设备同步。无痕、清除网站数据、换浏览器或 Safari 与独立桌面打开可能使用不同存储空间。多个浏览器标签页请只用一个工作台。
-
-“数据与备份”可导出或恢复完整 JSON，恢复前校验所有结构、约束与行数据，确认后替换；导入 .sql 失败会整体回退。数据库 SQL 导出可恢复空库的结构和数据，但不含完整自增状态、脚本草稿与练习记录。完整恢复请用 JSON。
-
-恢复示例只替换 finance_lab / campus_lab，保留自建库。清空全部数据会删除所有数据、草稿、历史与进度。两项都需要确认。
-
-iPhone Safari：分享 → 添加到主屏幕。提供 PNG 桌面图标、manifest、主题色和安全区布局。
-
-## 测试
-
-运行 `npm run test:acceptance`，或分别运行 `node tests/engine.test.mjs`、`node tests/storage.test.mjs`、`node tests/ui.test.mjs`。
-
-`public/test-report.json` 保存实际结果。DOM 集成测试使用 jsdom、真实 SQL Worker 代码和 fake-indexeddb，验证页面状态与操作，不提供布局引擎，不等同于真实浏览器渲染。375、390、430、768、1280px 检查导航状态与输入配置；样式使用相应断点进行代码校验。
-
-2026-10-09 的独立项目验收：SQL 核心 81 项、保存与备份 5 项、DOM 集成 14 项，总计 100 项通过，生产构建通过。
-
-自动化测试尚未包含真实 MySQL 8.4 服务器对照、真实 iPhone Safari、实机虚拟键盘、触控选择和实际像素溢出验证。不能把 DOM 测试当作 Safari 实测。
-
-参考：
-
-- https://github.com/taozhi8833998/node-sql-parser
-- https://docs.oracle.com/cd/E17952_01/mysql-8.4-en/fixed-point-types.html
-- https://docs.oracle.com/cd/E17952_01/mysql-8.4-en/group-by-handling.html
-- https://mikemcl.github.io/decimal.js/
-
-## 项目结构
+## 源码目录
 
 | 路径 | 用途 |
 | --- | --- |
-| `app/page.jsx`、`app/globals.css` | 工作台交互与响应式样式 |
-| `components/`、`hooks/` | SQL 编辑器、帮助界面与通用组件 |
-| `lib/sql/` | 词法处理、关系执行器、示例数据、练习与 Worker |
-| `lib/storage.mjs`、`lib/worker-client.mjs` | 本地保存、备份与异步执行 |
-| `tests/` | SQL、保存与 DOM 集成验收 |
-| `public/` | 图标、移动端配置与测试报告 |
-| `vendor/` | 第三方样式和许可证 |
+| [docs/](docs/README.md) | 分主题使用与开发文档 |
+| [app/](app/) | 工作台页面与响应式样式 |
+| [components/](components/) | SQL 编辑器、帮助面板、下载入口与 UI 组件 |
+| [lib/sql/](lib/sql/) | 词法处理、SQL 执行器、示例数据、练习与 Worker |
+| [lib/storage.mjs](lib/storage.mjs)、[lib/worker-client.mjs](lib/worker-client.mjs) | 本地保存、备份与异步任务通信 |
+| [desktop/](desktop/) | Electron 主进程、本地协议、图标与安装后操作检查 |
+| [tests/](tests/) | SQL、存储、界面与桌面协议检查 |
+| [public/](public/) | 移动端图标、manifest 与测试报告 |
+| [.github/workflows/](.github/workflows/) | 持续检查与 Windows 安装包发布 |
 
-GitHub Actions 在提交和拉取请求中安装锁定依赖，运行验收与生产构建。应用数据库与用户练习记录只存在各自浏览器，不包含在仓库中。
+代码入口与各模块之间的关系见 [开发指南](docs/development.md#代码入口)。
 
-## 贡献与许可证
+## 验证状态
 
-贡献前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。项目源码采用 [MIT License](LICENSE)。第三方软件沿用各自许可证，详情见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+**0.2.1 的现有记录：108 项自动化检查通过，8 项 Windows 安装后操作检查通过。**
 
-## 桌面版开发与发布
+查看 [仓库测试报告](public/test-report.json)、[Windows 发布报告](https://github.com/MarikoAkina/sql-lab/releases/download/v0.2.1/desktop-smoke.json)和 [GitHub Actions](https://github.com/MarikoAkina/sql-lab/actions)。测试组成、检查命令和报告边界见 [测试与验收](docs/testing.md)。
 
-```bash
-npm ci
-npm run desktop
-```
+尚未完成真实 MySQL 8.4 服务器逐条对照，以及真实 iPhone Safari、虚拟键盘与触控流程验收。DOM 测试中的屏幕宽度检查不等同于实机布局验证。
 
-Windows 环境生成安装程序：
+## 参与项目
 
-```bash
-npm run dist:windows
-```
+欢迎反馈最小可复现的 SQL 问题、改进中文讲解、补充财务练习或完善手机交互。请先阅读 [贡献指南](CONTRIBUTING.md)，再 [报告问题或提出建议](https://github.com/MarikoAkina/sql-lab/issues/new/choose)。
 
-输出为 `release/SQL-Lab-Setup-0.2.1.exe`。`desktop/` 包含桌面主进程、静态资源协议、独立应用清单和安装后的实际操作检查；`electron-builder.yml` 配置 NSIS 安装向导。网页前端与 SQL 引擎保持共享，前端依赖不作为桌面主进程依赖打包。
-
-Windows GitHub Actions 会运行 SQL、DOM 和桌面协议检查，构建 NSIS 安装程序，实际静默安装并启动程序，再检查输入、查询、金额、写入、复制、备份、刷新恢复和下载入口。通过后发布 EXE、SHA256 和 Windows 检查报告。普通版本发布时需同步根目录与 `desktop/package.json` 的版本、下载信息和发布说明。
-
-桌面壳使用固定的本地 `sqllab://app` 来源，IndexedDB 在重新打开后继续使用同一保存位置。渲染器关闭 Node 集成，启用隔离与沙箱；本地协议只读取应用资源。系统浏览器只打开 HTTPS 外部链接。
+项目采用 [MIT License](LICENSE)。第三方软件沿用各自许可证，详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
