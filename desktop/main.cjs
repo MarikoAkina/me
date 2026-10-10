@@ -47,7 +47,7 @@ else {
       {label: '文件', submenu: [{label: '关闭窗口', role: 'close'}, {label: '退出 SQL LAB', role: 'quit'}]},
       {label: '编辑', submenu: [{role:'undo',label:'撤销'},{role:'redo',label:'重做'},{type:'separator'},{role:'cut',label:'剪切'},{role:'copy',label:'复制'},{role:'paste',label:'粘贴'},{role:'selectAll',label:'全选'}]},
       {label: '视图', submenu: [{role:'reload',label:'重新打开工作台'},{role:'resetZoom',label:'实际大小'},{role:'zoomIn',label:'放大'},{role:'zoomOut',label:'缩小'},{role:'togglefullscreen',label:'全屏'}]},
-      {label: '帮助', submenu: [{label:'项目与下载',click:()=>external('https://github.com/MarikoAkina/me/releases')},{label:'关于 SQL LAB',click:()=>dialog.showMessageBox({type:'info',title:'SQL LAB',message:`SQL LAB ${app.getVersion()}`,detail:'MySQL 基础学习模拟器\n数据保存在本机；可通过完整 JSON 备份迁移。'})}]},
+      {label: '帮助', submenu: [{label:'项目与下载',click:()=>external('https://github.com/MarikoAkina/sql-lab/releases')},{label:'关于 SQL LAB',click:()=>dialog.showMessageBox({type:'info',title:'SQL LAB',message:`SQL LAB ${app.getVersion()}`,detail:'MySQL 基础学习模拟器\n数据保存在本机；可通过完整 JSON 备份迁移。'})}]},
     ]));
     mainWindow = createWindow();
     if (smoke) {

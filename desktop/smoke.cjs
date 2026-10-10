@@ -35,7 +35,7 @@ async function runSmoke(win, reportFile) {
       await js("document.querySelector('[data-slot=dialog-close]').click()");
     });
     await check('reload restores IndexedDB data and SQL draft',async()=>{win.webContents.reload();await until("document.querySelectorAll('.result-grid tbody tr').length===6");const draft=await js("document.querySelector('.cm-content').textContent");if(!draft.includes('桌面测试客户'))throw new Error('Draft did not restore');await edit('SELECT COUNT(*) AS total FROM customers;');await click('执行 SQL');await until("document.querySelector('.cell-button')?.textContent==='6'");});
-    await check('download dialog links to installer',async()=>{await js("document.querySelector('[aria-label=\"下载 Windows 安装版\"]').click()");await until("document.querySelector('.windows-install-link')?.href.endsWith('/SQL-Lab-Setup-0.2.0.exe')");});
+    await check('download dialog links to installer',async()=>{await js("document.querySelector('[aria-label=\"下载 Windows 安装版\"]').click()");await until("document.querySelector('.windows-install-link')?.href.endsWith('/SQL-Lab-Setup-0.2.1.exe')");});
     const image=await win.webContents.capturePage();await fs.writeFile(path.join(path.dirname(reportFile),'desktop-smoke.png'),image.toPNG());
     report.pass=report.checks.length;report.fail=0;report.finishedAt=new Date().toISOString();await fs.writeFile(reportFile,JSON.stringify(report,null,2));
   } catch(error) {

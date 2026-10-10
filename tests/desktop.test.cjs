@@ -10,7 +10,7 @@ test('desktop scheme keeps a fixed local storage origin', () => {
   for(const url of ['file:///etc/passwd','https://app/','sqllab://other/','sqllab://user@app/','sqllab://app:123/'])assert.equal(isInternalURL(url),false);
 });
 test('only HTTPS external links can leave the desktop app', () => {
-  assert.equal(isExternalURL('https://github.com/MarikoAkina/me/releases'),true);
+  assert.equal(isExternalURL('https://github.com/MarikoAkina/sql-lab/releases'),true);
   for(const url of ['file:///C:/Windows','javascript:alert(1)','http://example.com','https://user:pass@example.com'])assert.equal(isExternalURL(url),false);
 });
 test('desktop asset paths cannot escape the packaged UI directory', () => {

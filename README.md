@@ -3,21 +3,21 @@
 这是面向财务管理零基础学习者的手机 SQL 练习工作台。无需连接外部数据库服务器。
 
 ## Windows 安装
-+
-+前往 [Windows 安装包下载页](https://github.com/MarikoAkina/me/releases/tag/v0.2.0)，下载 `SQL-Lab-Setup-0.2.0.exe`。支持 Windows 10 / 11 的 x64 电脑；按安装向导选择位置，完成后从桌面或开始菜单打开 SQL LAB。
-+
-+安装后无需数据库、Node.js 或账号，SQL 练习可离线进行。安装包暂未使用 Authenticode 发布者证书，Windows 可能显示“未知发布者”；发布页提供 `SHA256SUMS.txt` 可核验完整性。
-+
-+桌面版数据位于本机 `%APPDATA%\SQL LAB`，网页版数据位于相应浏览器。通过“数据与备份”导出、恢复完整 JSON 可迁移数据库、草稿、历史和学习进度。升级沿用原数据；卸载不会自动清除练习数据，仍建议定期备份。
-+
-+桌面版支持原生窗口、菜单、剪切／复制／粘贴与缩放。帮助菜单可打开项目下载页。站点顶部的“Windows 安装版”和“数据与备份”面板都提供安装下载入口。
-+
-+## 本地运行
+
+前往 [Windows 安装包下载页](https://github.com/MarikoAkina/sql-lab/releases/tag/v0.2.1)，下载 `SQL-Lab-Setup-0.2.1.exe`。支持 Windows 10 / 11 的 x64 电脑；按安装向导选择位置，完成后从桌面或开始菜单打开 SQL LAB。
+
+安装后无需数据库、Node.js 或账号，SQL 练习可离线进行。安装包暂未使用 Authenticode 发布者证书，Windows 可能显示“未知发布者”；发布页提供 `SHA256SUMS.txt` 可核验完整性。
+
+桌面版数据位于本机 `%APPDATA%\SQL LAB`，网页版数据位于相应浏览器。通过“数据与备份”导出、恢复完整 JSON 可迁移数据库、草稿、历史和学习进度。升级沿用原数据；卸载不会自动清除练习数据，仍建议定期备份。
+
+桌面版支持原生窗口、菜单、剪切／复制／粘贴与缩放。帮助菜单可打开项目下载页。站点顶部的“Windows 安装版”和“数据与备份”面板都提供安装下载入口。
+
+## 本地运行
 
 需要 Node.js 22.13 或更高版本，以及 npm。首次安装后直接启动，无需配置数据库或密钥。
 
 ```bash
-git clone https://github.com/MarikoAkina/me.git sql-lab
+git clone https://github.com/MarikoAkina/sql-lab.git sql-lab
 cd sql-lab
 npm ci
 npm run dev
@@ -127,20 +127,20 @@ GitHub Actions 在提交和拉取请求中安装锁定依赖，运行验收与�
 贡献前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。项目源码采用 [MIT License](LICENSE)。第三方软件沿用各自许可证，详情见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
 
 ## 桌面版开发与发布
-+
-+```bash
-+npm ci
-+npm run desktop
-+```
-+
-+Windows 环境生成安装程序：
-+
-+```bash
-+npm run dist:windows
-+```
-+
-+输出为 `release/SQL-Lab-Setup-0.2.0.exe`。`desktop/` 包含桌面主进程、静态资源协议、独立应用清单和安装后的实际操作检查；`electron-builder.yml` 配置 NSIS 安装向导。网页前端与 SQL 引擎保持共享，前端依赖不作为桌面主进程依赖打包。
-+
-+Windows GitHub Actions 会运行 SQL、DOM 和桌面协议检查，构建 NSIS 安装程序，实际静默安装并启动程序，再检查输入、查询、金额、写入、复制、备份、刷新恢复和下载入口。通过后发布 EXE、SHA256 和 Windows 检查报告。普通版本发布时需同步根目录与 `desktop/package.json` 的版本、下载信息和发布说明。
-+
-+桌面壳使用固定的本地 `sqllab://app` 来源，IndexedDB 在重新打开后继续使用同一保存位置。渲染器关闭 Node 集成，启用隔离与沙箱；本地协议只读取应用资源。系统浏览器只打开 HTTPS 外部链接。
+
+```bash
+npm ci
+npm run desktop
+```
+
+Windows 环境生成安装程序：
+
+```bash
+npm run dist:windows
+```
+
+输出为 `release/SQL-Lab-Setup-0.2.1.exe`。`desktop/` 包含桌面主进程、静态资源协议、独立应用清单和安装后的实际操作检查；`electron-builder.yml` 配置 NSIS 安装向导。网页前端与 SQL 引擎保持共享，前端依赖不作为桌面主进程依赖打包。
+
+Windows GitHub Actions 会运行 SQL、DOM 和桌面协议检查，构建 NSIS 安装程序，实际静默安装并启动程序，再检查输入、查询、金额、写入、复制、备份、刷新恢复和下载入口。通过后发布 EXE、SHA256 和 Windows 检查报告。普通版本发布时需同步根目录与 `desktop/package.json` 的版本、下载信息和发布说明。
+
+桌面壳使用固定的本地 `sqllab://app` 来源，IndexedDB 在重新打开后继续使用同一保存位置。渲染器关闭 Node 集成，启用隔离与沙箱；本地协议只读取应用资源。系统浏览器只打开 HTTPS 外部链接。
