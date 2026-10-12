@@ -6,7 +6,7 @@
 
 Windows 用户可在 [发布页](https://github.com/MarikoAkina/sql-lab/releases/latest)下载安装程序。当前版本为 0.2.1，适用于 Windows 10 / 11 x64；安装后即可离线使用，无需安装 MySQL、Node.js 或注册账号。
 
-手机使用网页版本。现有 [Sites 站点](https://mysql-foundry.marikoakina.chatgpt.site)当前仅维护者可访问；可按 [开发与部署指南](development.md)运行自己的网页实例，再在手机浏览器打开。
+手机可直接打开 [公开体验网页](https://mysql-foundry.marikoakina.chatgpt.site)，无需注册应用账号。也可按 [开发与部署指南](development.md)运行自己的网页实例。
 
 首次打开会创建示例数据库，并选择 `finance_lab`。以后打开会读取当前浏览器保存的工作台，不会重新覆盖示例数据。当前产品是 [MySQL 基础学习模拟器](sql-compatibility.md)，不提供真实 MySQL 服务器连接。
 

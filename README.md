@@ -12,13 +12,14 @@
 [![Windows installer](https://github.com/MarikoAkina/sql-lab/actions/workflows/windows.yml/badge.svg)](https://github.com/MarikoAkina/sql-lab/actions/workflows/windows.yml)
 [版本与安装包](https://github.com/MarikoAkina/sql-lab/releases/latest) · [MIT License](LICENSE)
 
-**[下载 Windows 安装版](https://github.com/MarikoAkina/sql-lab/releases/latest)** · **[阅读新手指南](docs/getting-started.md)** · **[打开文档目录](docs/README.md)**
+**[在线体验](https://mysql-foundry.marikoakina.chatgpt.site)** · **[下载 Windows 安装版](https://github.com/MarikoAkina/sql-lab/releases/latest)** · **[阅读新手指南](docs/getting-started.md)** · **[打开文档目录](docs/README.md)**
 
 > SQL LAB 是基础学习模拟器，兼容目标为 MySQL 8.4 的部分基础语法。字符串比较、类型转换、分组与自增等行为仍有差异，详见 [SQL 支持范围与兼容限制](docs/sql-compatibility.md)。
 
 ## 页面导航
 
 - [开始使用](#开始使用)
+- [界面预览](#界面预览)
 - [第一条 SQL](#第一条-sql)
 - [功能概览](#功能概览)
 - [学习路线](#学习路线)
@@ -32,16 +33,17 @@
 | 使用方式 | 入口 | 说明 |
 | --- | --- | --- |
 | Windows 安装版 | [下载最新发布版本](https://github.com/MarikoAkina/sql-lab/releases/latest) | Windows 10 / 11 x64；安装后可离线练习，无需 Node.js、MySQL 或账号 |
-| 手机与电脑网页 | [本地运行与部署指南](docs/development.md) | 使用现代浏览器；支持手机、平板与桌面布局，可自行部署为静态网站 |
+| 手机与电脑网页 | [打开公开体验网页](https://mysql-foundry.marikoakina.chatgpt.site) | 无需注册应用账号；练习记录保存在当前浏览器，也可自行部署 |
 
 当前 Windows 版本为 **0.2.1**。下载 `SQL-Lab-Setup-0.2.1.exe`，按向导安装并打开 SQL LAB。安装包暂未使用发布者证书，Windows 可能显示“未知发布者”；[发布页](https://github.com/MarikoAkina/sql-lab/releases/tag/v0.2.1)提供 SHA256 校验文件与安装检查报告。
 
-<details>
-<summary>现有网页站点的访问说明</summary>
+网页已开放为公开试用。数据仍分别保存在各自浏览器，不会自动跨设备同步。自行部署和本地运行见 [开发指南](docs/development.md)。
 
-[已部署站点](https://mysql-foundry.marikoakina.chatgpt.site)当前仅向维护者开放，并非公开在线演示。其他用户可使用 Windows 安装版，或按部署指南运行自己的网页实例。
+## 界面预览
 
-</details>
+![SQL LAB 工作台：数据库导航、SQL 编辑器和查询结果](docs/media/workbench.png)
+
+*真实界面预览，图中的客户和邮箱为虚构教学数据。*
 
 ## 第一条 SQL
 
@@ -127,6 +129,8 @@ SQL 使用 **node-sql-parser 的 MySQL AST 与自有结构化执行器**，金�
 尚未完成真实 MySQL 8.4 服务器逐条对照，以及真实 iPhone Safari、虚拟键盘与触控流程验收。DOM 测试中的屏幕宽度检查不等同于实机布局验证。
 
 ## 参与项目
+
+[首轮试用与宣传素材](docs/promotion/README.md)包含分享封面、体验卡片、SQL 实操教程和可转发短文。
 
 欢迎反馈最小可复现的 SQL 问题、改进中文讲解、补充财务练习或完善手机交互。请先阅读 [贡献指南](CONTRIBUTING.md)，再 [报告问题或提出建议](https://github.com/MarikoAkina/sql-lab/issues/new/choose)。
 
