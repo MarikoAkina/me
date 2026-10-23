@@ -13,7 +13,7 @@ async function runSmoke(win, reportFile) {
   async function click(label) {
     const lookup=`[...document.querySelectorAll('button')].find(b=>b.textContent.trim()===${JSON.stringify(label)})`;
     await until(`Boolean((${lookup})&&!(${lookup}).disabled)`);
-    await js(`(()=>{const b=${lookup};if(!b)throw new Error('Missing button: '+${JSON.stringify(label)});b.click();})()`);
+    await js(`(()=>{const b=${lookup};if(!b)throw new Error('Missing button: '+${JSON.stringify(label)});b.dispatchEvent(new MouseEvent('mousedown',{bubbles:true,button:0}));b.dispatchEvent(new MouseEvent('mouseup',{bubbles:true,button:0}));b.click();})()`);
   }
   async function edit(sql) {
     await js("document.querySelector('.cm-content').focus()");
