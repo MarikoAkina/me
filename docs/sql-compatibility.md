@@ -25,7 +25,21 @@ SQL 在 Web Worker 中执行，金额使用 decimal.js 的 80 位十进制运算
 | 聚合与分组 | `COUNT`、`SUM`、`AVG`、`MAX`、`MIN`；`GROUP BY`、`HAVING` |
 | 连接 | 两表 `INNER JOIN` / `LEFT JOIN`，表别名与 `ON` 条件 |
 | 子查询 | 基础非关联 `IN (SELECT ...)` 和返回单个值的标量子查询 |
-| 函数 | `ROUND`、`IFNULL`、`CONCAT`、`UPPER`、`LOWER` |
+| 条件与空值 | 搜索型 `CASE WHEN`、等值型 `CASE 值 WHEN`；`IF`、`IFNULL`、`COALESCE`、`NULLIF` |
+| 金额与取整 | `ROUND`、`ABS`、`CEIL` / `CEILING`、`FLOOR`、`MOD` |
+| 文本函数 | `CONCAT`、`UPPER`、`LOWER`、`LENGTH`、`CHAR_LENGTH` / `CHARACTER_LENGTH`、`TRIM`、`LTRIM`、`RTRIM`、`LEFT`、`RIGHT`、`SUBSTRING` / `SUBSTR`、`REPLACE` |
+| 日期函数 | `YEAR`、`MONTH`、`DAY` / `DAYOFMONTH`、`QUARTER`、`DATE`、`DATEDIFF`、`DATE_FORMAT` |
+
+## 首轮函数扩展的边界
+
+- CASE 按顺序返回第一个匹配分支；未写 ELSE 且未匹配时返回 NULL。`CASE NULL WHEN NULL` 不视为相等。IF 的零与 NULL 条件选择假分支。CASE、IF、IFNULL、COALESCE 按需计算所选分支，但仍预先校验所有分支中的字段与函数名称。
+- `SUBSTRING(文本,位置[,长度])` 与 `SUBSTRING(文本 FROM 位置 [FOR 长度])` 均支持；SUBSTR 为同义写法。位置从 1 开始，负数从末尾计，位置 0 或非正长度返回空串；非整数位置和长度四舍五入。
+- LENGTH 统计 UTF-8 字节；CHAR_LENGTH 和截取函数按 Unicode 码点处理，组合字符不合并为一个视觉字形。TRIM / LTRIM / RTRIM 只移除普通空格，不移除制表符。`TRIM(BOTH ... FROM ...)` 等扩展形式尚未支持。REPLACE 为区分大小写的字面替换。
+- 日期参数限有效的 `YYYY-MM-DD` 或 `YYYY-MM-DD HH:mm:ss`，年份 1000–9999；不接受零日期、宽松日期文本、时区或微秒。DATEDIFF 计算第一个日期减去第二个日期，忽略时间部分。
+- DATE_FORMAT 仅支持 `%Y %y %m %c %d %e %H %k %h %I %l %i %s %S %p %T %%`。其他格式码返回 SIM_UNSUPPORTED；不支持本地化月份名、星期名或周数。CURDATE、NOW、日期加减与 INTERVAL 尚未支持。
+- ABS、CEIL / CEILING、FLOOR、MOD 和 ROUND 使用十进制；ROUND 的位数限 -30～30 的整数。MOD 的结果符号随被除数，除零返回 NULL。
+
+[首轮扩展指南与第 16–27 题](expansion-1.md)提供示例。
 
 ## 输入与执行规则
 
@@ -70,7 +84,8 @@ USE finance_lab;
 | 类型转换 | 严格写入与转换，不隐式把非数字文本当作 0；INT 不自动舍入 |
 | 金额 | DECIMAL 写入四舍五入；十进制计算避免明显的二进制浮点误差，但返回精度与显示尺度可能不同 |
 | 分组 | 严格 GROUP BY；不推导主键函数依赖或 WHERE 单值依赖，不支持 GROUP BY 列序号 |
-| 日期 | 支持基础 DATE / DATETIME；不支持时区、零日期与微秒 |
+| 日期 | 支持基础 DATE / DATETIME 与上述限定函数；无效日期参数直接报 1292，不复现 MySQL 可能返回 NULL 并附警告的所有情况 |
+| 条件结果类型 | CASE、IF、IFNULL、COALESCE 返回所选分支的原值；不模拟 MySQL 对所有分支汇总结果类型后转换的行为，混合文本和数字时可能不同 |
 | 自增 | 失败写入也恢复自增计数器，与 InnoDB 失败操作可能消耗编号的行为存在差异 |
 | 并发与性能 | 浏览器单工作台执行，小数据集教学用途；不模拟锁、索引优化、并发事务与服务器性能 |
 
@@ -89,7 +104,7 @@ USE finance_lab;
 
 ## 尚未实现
 
-视图、索引管理、外键、事务、复合约束、CHECK、触发器、权限、存储过程、CTE、UNION、窗口函数、关联子查询、RIGHT / CROSS JOIN、派生表、INSERT SELECT、REPLACE、UPDATE / DELETE 的 ORDER BY / LIMIT、字符集和存储引擎选项、系统表，以及 MySQL 客户端命令。
+视图、索引管理、外键、事务、复合约束、CHECK、触发器、权限、存储过程、CTE、UNION、窗口函数、关联子查询、RIGHT / CROSS JOIN、派生表、INSERT SELECT、REPLACE INTO、UPDATE / DELETE 的 ORDER BY / LIMIT、字符集和存储引擎选项、系统表，以及 MySQL 客户端命令。
 
 ## 容量与执行上限
 
@@ -103,6 +118,7 @@ USE finance_lab;
 | 单条执行 | 3 秒或 200 万步 |
 | 结果与 JOIN 中间结果 | 10,000 行 |
 | 结果分页 | 每页 100 行 |
+| 文本函数结果 | 200,000 个 UTF-16 代码单元 |
 | 完整 JSON 备份 | 20 MB |
 
 本页描述已实现规则，不表示已经完成真实 MySQL 8.4 逐条对照；当前证据见 [测试与验收](testing.md)。
@@ -113,3 +129,7 @@ USE finance_lab;
 - [decimal.js](https://mikemcl.github.io/decimal.js/)：十进制计算。
 - [MySQL 8.4 固定精度类型](https://docs.oracle.com/cd/E17952_01/mysql-8.4-en/fixed-point-types.html)。
 - [MySQL 8.4 GROUP BY 处理](https://docs.oracle.com/cd/E17952_01/mysql-8.4-en/group-by-handling.html)。
+
+- [MySQL 8.4 条件表达式与函数](https://docs.oracle.com/cd/E17952_01/mysql-8.4-en/flow-control-functions.html)。
+- [MySQL 8.4 字符串函数](https://docs.oracle.com/cd/E17952_01/mysql-8.4-en/string-functions.html)。
+- [MySQL 8.4 日期与时间函数](https://docs.oracle.com/cd/E17952_01/mysql-8.4-en/date-and-time-functions.html)。

@@ -48,7 +48,8 @@ npm run dev -- --host 0.0.0.0
 | 工作台 | [app/page.jsx](../app/page.jsx)、[app/globals.css](../app/globals.css) | 编辑、结果、导航、练习和响应式界面 |
 | 编辑与辅助界面 | [components/sql-editor.jsx](../components/sql-editor.jsx)、[components/support.jsx](../components/support.jsx) | CodeMirror 编辑器、补全与帮助 |
 | SQL 核心 | [lib/sql/engine.mjs](../lib/sql/engine.mjs)、[lib/sql/lexer.mjs](../lib/sql/lexer.mjs) | AST 执行、关系计算、类型约束、词法扫描与语句切分 |
-| 示例与教学 | [lib/sql/seed.mjs](../lib/sql/seed.mjs)、[lib/sql/lessons.mjs](../lib/sql/lessons.mjs) | 示例库、15 道练习、结果与状态批改 |
+| 标量函数 | [lib/sql/functions.mjs](../lib/sql/functions.mjs) | 参数规格、文本边界、十进制和日期函数 |
+| 示例与教学 | [lib/sql/seed.mjs](../lib/sql/seed.mjs)、[lib/sql/lessons.mjs](../lib/sql/lessons.mjs) | 示例库、27 道练习、结果与状态批改 |
 | 后台任务 | [lib/sql/worker.mjs](../lib/sql/worker.mjs)、[lib/worker-client.mjs](../lib/worker-client.mjs) | Worker 执行与主线程通信 |
 | 本地存储 | [lib/storage.mjs](../lib/storage.mjs) | IndexedDB、完整备份封装与恢复校验 |
 | Windows 包装 | [desktop/main.cjs](../desktop/main.cjs)、[desktop/protocol.cjs](../desktop/protocol.cjs) | Electron 窗口、菜单与本地静态资源来源 |
@@ -85,15 +86,17 @@ npm run desktop
 npm run dist:windows
 ```
 
-当前版本输出 `release/SQL-Lab-Setup-0.2.1.exe`。[electron-builder.yml](../electron-builder.yml)配置 NSIS 安装向导；[desktop/prepare.mjs](../desktop/prepare.mjs)复制网页构建和许可证到应用目录。
+当前版本输出 `release/SQL-Lab-Setup-0.3.0.exe`。[electron-builder.yml](../electron-builder.yml)配置 NSIS 安装向导；[desktop/prepare.mjs](../desktop/prepare.mjs)复制网页构建和许可证到应用目录。
 
 桌面版与网页共用前端和 SQL 引擎。渲染器关闭 Node 集成，启用隔离与沙箱；固定的 `sqllab://app` 来源保持本地存储来源一致，本地协议只读取应用资源，外部链接使用系统浏览器打开 HTTPS 地址。
 
 ## 持续检查与发布
 
 - [Checks 工作流](../.github/workflows/ci.yml)：提交和拉取请求触发，安装锁定依赖，运行 `npm test` 与生产构建。
-- [Windows installer 工作流](../.github/workflows/windows.yml)：主分支相关源码变更或手动触发，构建安装包、实际安装并启动应用，完成 8 项操作检查后发布 EXE、SHA256 和检查报告。
+- [Windows installer 工作流](../.github/workflows/windows.yml)：主分支相关源码变更或手动触发，构建安装包、实际安装并启动应用，完成 10 项操作检查后发布 EXE、SHA256 和检查报告。
 
 发布新版本时同步根目录与 `desktop/package.json` 的版本、[下载信息](../lib/release.mjs)、[发布说明](../desktop/release-notes.md)以及文档中的版本描述。`desktop/ui/`、`dist/` 和 `release/` 是生成目录，不作为源码提交。
 
 安装包当前没有 Authenticode 发布者证书。发布验收和未完成的实机验证见 [测试与验收](testing.md)。
+
+新增练习时维护 `lib/sql/lesson-meta.mjs` 的总数与连续题号；原编号保持稳定。附加样本使用题目的 `setup`，通过 `createLessonState` 创建独立副本；同时更新结果判题、保存恢复与 UI 验收。

@@ -35,7 +35,23 @@ async function runSmoke(win, reportFile) {
       await js("document.querySelector('[data-slot=dialog-close]').click()");
     });
     await check('reload restores IndexedDB data and SQL draft',async()=>{win.webContents.reload();await until("document.querySelectorAll('.result-grid tbody tr').length===6");const draft=await js("document.querySelector('.cm-content').textContent");if(!draft.includes('桌面测试客户'))throw new Error('Draft did not restore');await edit('SELECT COUNT(*) AS total FROM customers;');await click('执行 SQL');await until("document.querySelector('.cell-button')?.textContent==='6'");});
-    await check('download dialog links to installer',async()=>{await js("document.querySelector('[aria-label=\"下载 Windows 安装版\"]').click()");await until("document.querySelector('.windows-install-link')?.href.endsWith('/SQL-Lab-Setup-0.2.1.exe')");});
+    await check('expanded CASE, dates and exact amounts in packaged Worker',async()=>{
+      await edit("SELECT CASE WHEN 1200>=1000 THEN '大额' ELSE '小额' END AS tier,DATE_FORMAT('2026-09-30','%Y-%m') AS month,ABS(-0.1-0.2) AS amount;");
+      await click('执行 SQL');await until("JSON.stringify([...document.querySelectorAll('.result-grid tbody .cell-button')].map(c=>c.textContent))===JSON.stringify(['大额','2026-09','0.3'])");
+    });
+    await check('new monthly lesson grades and restores progress without changing workbench',async()=>{
+      await click('学习练习');await click('本轮新增');
+      const count=await js("document.querySelectorAll('[data-lesson-id]').length");if(count!==12)throw new Error('Expanded lesson count mismatch');
+      await js("document.querySelector('[data-lesson-id=\"23\"]').click()");
+      const answer="SELECT DATE_FORMAT(expense_date,'%Y-%m') AS month,SUM(amount) AS total FROM expenses GROUP BY month ORDER BY month;";
+      await edit(answer);await click('执行并批改');await until("document.querySelector('.grade-feedback.passed')&&document.querySelectorAll('.result-grid tbody tr').length===2");
+      await until("document.querySelector('.app-footer')?.textContent.includes('已保存')");
+      win.webContents.reload();await until("document.querySelector('.cm-content')");await click('学习练习');await click('本轮新增');await js("document.querySelector('[data-lesson-id=\"23\"]').click()");
+      await until("document.querySelector('[data-lesson-id=\"23\"] .complete')");
+      const draft=await js("document.querySelector('.cm-content').textContent");if(draft.replace(/\s/g,'')!==answer.replace(/\s/g,''))throw new Error('New lesson draft did not restore');
+      await click('工作台');await edit('SELECT COUNT(*) FROM customers;');await click('执行 SQL');await until("document.querySelector('.cell-button')?.textContent==='6'");
+    });
+    await check('download dialog links to installer',async()=>{await js("document.querySelector('[aria-label=\"下载 Windows 安装版\"]').click()");await until("document.querySelector('.windows-install-link')?.href.endsWith('/SQL-Lab-Setup-0.3.0.exe')");});
     const image=await win.webContents.capturePage();await fs.writeFile(path.join(path.dirname(reportFile),'desktop-smoke.png'),image.toPNG());
     report.pass=report.checks.length;report.fail=0;report.finishedAt=new Date().toISOString();await fs.writeFile(reportFile,JSON.stringify(report,null,2));
   } catch(error) {

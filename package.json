@@ -1,6 +1,6 @@
 {
   "name": "sql-lab",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": true,
   "engines": {
     "node": ">=22.13.0"
@@ -11,8 +11,8 @@
     "preview": "vite preview",
     "start": "vite preview",
     "test": "npm run test:acceptance && npm run test:desktop",
-    "test:acceptance": "node tests/engine.test.mjs && node tests/storage.test.mjs && node tests/ui.test.mjs",
-    "test:engine": "node tests/engine.test.mjs",
+    "test:acceptance": "node tests/engine.test.mjs && node --test tests/expansion.test.mjs && node tests/storage.test.mjs && node tests/ui.test.mjs",
+    "test:engine": "node tests/engine.test.mjs && node --test tests/expansion.test.mjs",
     "test:storage": "node tests/storage.test.mjs",
     "test:ui": "node tests/ui.test.mjs",
     "desktop:prepare": "npm run build && node desktop/prepare.mjs",
@@ -74,10 +74,10 @@
   "description": "A mobile-friendly MySQL basics learning simulator with local databases and guided exercises.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MarikoAkina/me.git"
+    "url": "https://github.com/MarikoAkina/sql-lab.git"
   },
   "bugs": {
-    "url": "https://github.com/MarikoAkina/me/issues"
+    "url": "https://github.com/MarikoAkina/sql-lab/issues"
   },
   "author": {
     "name": "MarikoAkina"

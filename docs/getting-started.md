@@ -4,7 +4,7 @@
 
 ## 打开工作台
 
-Windows 用户可在 [发布页](https://github.com/MarikoAkina/sql-lab/releases/latest)下载安装程序。当前版本为 0.2.1，适用于 Windows 10 / 11 x64；安装后即可离线使用，无需安装 MySQL、Node.js 或注册账号。
+Windows 用户可在 [发布页](https://github.com/MarikoAkina/sql-lab/releases/latest)下载安装程序。当前版本为 0.3.0，适用于 Windows 10 / 11 x64；安装后即可离线使用，无需安装 MySQL、Node.js 或注册账号。
 
 手机可直接打开 [公开体验网页](https://mysql-foundry.marikoakina.chatgpt.site)，无需注册应用账号。也可按 [开发与部署指南](development.md)运行自己的网页实例。
 
@@ -80,6 +80,11 @@ ORDER BY total DESC;
 | 10–11 | 保留未匹配记录的 LEFT JOIN、平均金额子查询 |
 | 12–14 | 插入客户、修改指定订单、删除指定费用 |
 | 15 | 设计包含主键、非空字段、金额与日期的预算表 |
+| 16–21 | CASE 分类、IF 与空值、中文截取、清理和替换 |
+| 22–24 | 日期提取、按月汇总与日期差 |
+| 25–27 | 条件聚合、预算取整和综合费用分析 |
+
+目前共 27 题。已完成入门题时，点练习列表中的 **本轮新增**，从第 16 题继续。第 23、27 题含独立的 10 月附加记录，便于检查月份筛选；工作台数据不会因此改变。新函数示例见 [首轮扩展指南](expansion-1.md)。
 
 查询批改比较实际结果，接受得到正确结果的不同写法。除要求排序的题目外，不因行顺序不同而判错；重复行、列顺序和 NULL 仍参与比较，列别名不限。
 
