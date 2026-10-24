@@ -86,7 +86,7 @@ npm run desktop
 npm run dist:windows
 ```
 
-当前版本输出 `release/SQL-Lab-Setup-0.3.0.exe`。[electron-builder.yml](../electron-builder.yml)配置 NSIS 安装向导；[desktop/prepare.mjs](../desktop/prepare.mjs)复制网页构建和许可证到应用目录。
+当前版本输出 `release/SQL-Lab-Setup-0.3.1.exe`。[electron-builder.yml](../electron-builder.yml)配置 NSIS 安装向导；[desktop/prepare.mjs](../desktop/prepare.mjs)复制网页构建和许可证到应用目录。
 
 桌面版与网页共用前端和 SQL 引擎。渲染器关闭 Node 集成，启用隔离与沙箱；固定的 `sqllab://app` 来源保持本地存储来源一致，本地协议只读取应用资源，外部链接使用系统浏览器打开 HTTPS 地址。
 
