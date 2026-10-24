@@ -1,15 +1,16 @@
 {
   "product": "SQL LAB · MySQL 基础学习模拟器",
-  "testedAt": "2026-10-23T14:14:39.086433+00:00",
+  "testedAt": "2026-10-24T11:36:50.591098+08:00",
   "summary": {
     "tests": 149,
-    "fail": 0,
-    "pass": 149
+    "pass": 149,
+    "fail": 0
   },
   "suites": [
     {
       "suite": "SQL 核心",
       "tests": 81,
+      "pass": 81,
       "fail": 0,
       "cases": [
         "完整建库、建表、插入、查询流程",
@@ -93,12 +94,12 @@
         "转义反斜杠和非引号双写不重复解码",
         "无效自增主键写入返回准确类型错误",
         "关联子查询明确提示未支持"
-      ],
-      "pass": 81
+      ]
     },
     {
-      "suite": "首轮语法与练习扩展",
+      "suite": "函数与练习扩展",
       "tests": 35,
+      "pass": 35,
       "fail": 0,
       "cases": [
         "searched CASE respects first match, missing ELSE and NULL conditions",
@@ -136,12 +137,12 @@
         "expanded lesson registry keeps original ids and rejects wrong query results",
         "expanded grader accepts alternative correct expressions and ordering rules",
         "final financial report filters October records and calculates independent expected amounts"
-      ],
-      "pass": 35
+      ]
     },
     {
       "suite": "IndexedDB 保存与备份",
       "tests": 8,
+      "pass": 8,
       "fail": 0,
       "cases": [
         "IndexedDB 自动保存、刷新等价重新读取与草稿进度恢复",
@@ -152,12 +153,12 @@
         "旧版 1–15 题的数据库、草稿和进度无需迁移即可恢复",
         "新增第 27 题的草稿与进度可保存、刷新并完整备份恢复",
         "未知编号和异常草稿仍拒绝恢复"
-      ],
-      "pass": 8
+      ]
     },
     {
       "suite": "DOM 页面集成",
       "tests": 18,
+      "pass": 18,
       "fail": 0,
       "cases": [
         "工作台实际挂载，首次 SELECT 返回 5 位客户",
@@ -168,7 +169,7 @@
         "SQL 标签新建和草稿保存",
         "学习练习实际批改，独立数据与进度保存",
         "练习提示、参考答案默认折叠与重新开始",
-        "本轮新增筛选显示 12 题，跨月练习可执行并批改",
+        "统一列表保留 27 个唯一题号，跨月练习可执行并批改",
         "关联练习同时显示客户和订单表结构，并按原样恢复新题草稿",
         "新增 SQL 输入辅助可插入并撤销 CASE",
         "375/390/430/768/1280px 的区域导航状态与输入属性",
@@ -178,12 +179,12 @@
         "SQL 文件失败导入全部回退，合法文件可导入",
         "完整备份恢复实际替换数据库与脚本，损坏备份拒绝",
         "Windows 安装入口和下载链接可在数据面板打开"
-      ],
-      "pass": 18
+      ]
     },
     {
-      "suite": "桌面本地协议与隔离",
+      "suite": "桌面协议",
       "tests": 7,
+      "pass": 7,
       "fail": 0,
       "cases": [
         "desktop scheme keeps a fixed local storage origin",
@@ -193,8 +194,7 @@
         "packaged module responses preserve code and correct MIME type",
         "missing packaged files fail rather than falling back to arbitrary HTML",
         "desktop protocol accepts HEAD and rejects write requests"
-      ],
-      "pass": 7
+      ]
     }
   ],
   "responsiveWidths": [
@@ -204,20 +204,20 @@
     768,
     1280
   ],
-  "responsiveVerification": "375/390/430/768/1280px 的 DOM 导航状态与输入属性测试、响应式样式代码检查。预览浏览器因平台 URL 访问策略拒绝，未完成像素布局验收。",
+  "responsiveVerification": "真实 Chromium 开发 iframe 视口 375/390/430/768/1280px 实际渲染、截图及页面宽度检查；同时有 DOM 状态测试。详见 /ui-review-checks.json。",
   "largeDataset": "5,000 行精确金额数据：查询和 SUM/COUNT 聚合通过。",
   "engine": "MySQL AST structured evaluator + decimal.js; writes atomic per statement; worker sequential execution; whole-file import rollback.",
   "notVerified": [
-    "真实 iPhone Safari 的视觉布局、触控选区、虚拟键盘和复制权限",
-    "真实 MySQL 8.4 服务器逐条结果对照；新增函数按官方文档和独立预期值验证",
-    "真实浏览器 WebMCP API；接口在 DOM 注册模拟器中验证",
-    "网页实际像素布局与交互式浏览器 QA；预览访问被平台策略拒绝，DOM 测试没有布局引擎"
+    "真实 MySQL 8.4 服务器逐条对照",
+    "真实 iPhone Safari、触控、虚拟键盘、安全区和横竖屏",
+    "当前 HTTP 预览的系统剪贴板自动复制权限：只验证降级窗口",
+    "本轮没有生成或重新安装 Windows EXE；旧版安装验收不能视为新版验收"
   ],
   "scope": "站点中“支持的语法与说明”列出完整语法范围、容量与兼容差异。",
   "mobileFeedback": "手机结果页直接显示批改反馈、继续编辑、提示和下一题，DOM 操作测试通过。",
   "distribution": "独立 React/Vite 客户端项目：锁定依赖安装、SQL 与 DOM 验收。",
-  "desktopVerification": "Windows 安装与实际操作检查报告随安装包在 GitHub Release 中发布；本文件只记录源码验收。",
-  "version": "0.3.0",
+  "desktopVerification": "安装包通过 Windows 发布流程构建、实际安装与 10 项检查后发布；具体结果见同版本 release 的 desktop-smoke.json。",
+  "version": "0.3.1",
   "lessonCount": 27,
   "addedLessons": [
     16,

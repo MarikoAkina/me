@@ -1,6 +1,6 @@
 {
   "name": "sql-lab",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "engines": {
     "node": ">=22.13.0"
@@ -78,8 +78,5 @@
   },
   "bugs": {
     "url": "https://github.com/MarikoAkina/sql-lab/issues"
-  },
-  "author": {
-    "name": "MarikoAkina"
   }
 }

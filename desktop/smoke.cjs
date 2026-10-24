@@ -47,20 +47,20 @@ async function runSmoke(win, reportFile) {
       await click('执行 SQL');await until("JSON.stringify([...document.querySelectorAll('.result-grid tbody .cell-button')].map(c=>c.textContent))===JSON.stringify(['大额','2026-09','0.3'])");
     });
     await check('new monthly lesson grades and restores progress without changing workbench',async()=>{
-      await click('学习练习');await click('本轮新增');
-      await until("document.querySelectorAll('[data-lesson-id]').length===12");
-      const count=await js("document.querySelectorAll('[data-lesson-id]').length");if(count!==12)throw new Error('Expanded lesson count mismatch');
+      await click('学习练习');
+      await until("document.querySelectorAll('[data-lesson-id]').length===27");
+      const count=await js("document.querySelectorAll('[data-lesson-id]').length");if(count!==27)throw new Error('Expanded lesson count mismatch');
       await js("document.querySelector('[data-lesson-id=\"23\"]').click()");
       await until("document.querySelector('[data-lesson-id=\"23\"]').classList.contains('current-lesson')");
       const answer="SELECT DATE_FORMAT(expense_date,'%Y-%m') AS month,SUM(amount) AS total FROM expenses GROUP BY month ORDER BY month;";
       await edit(answer);await click('执行并批改');await until("document.querySelector('.grade-feedback.passed')&&document.querySelectorAll('.result-grid tbody tr').length===2");
       await until("document.querySelector('.app-footer')?.textContent.includes('已保存')");
-      win.webContents.reload();await until("document.querySelector('.cm-content')");await click('学习练习');await click('本轮新增');await js("document.querySelector('[data-lesson-id=\"23\"]').click()");
+      win.webContents.reload();await until("document.querySelector('.cm-content')");await click('学习练习');await js("document.querySelector('[data-lesson-id=\"23\"]').click()");
       await until("document.querySelector('[data-lesson-id=\"23\"] .complete')");
       await until(`document.querySelector('.cm-content').textContent.replace(/\\s/g,'')===${JSON.stringify(answer.replace(/\s/g,''))}`);
       await click('工作台');await edit('SELECT COUNT(*) FROM customers;');await click('执行 SQL');await until("document.querySelector('.cell-button')?.textContent==='6'");
     });
-    await check('download dialog links to installer',async()=>{await js("document.querySelector('[aria-label=\"下载 Windows 安装版\"]').click()");await until("document.querySelector('.windows-install-link')?.href.endsWith('/SQL-Lab-Setup-0.3.0.exe')");});
+    await check('download dialog links to installer',async()=>{await js("document.querySelector('[aria-label=\"下载 Windows 安装版\"]').click()");await until("document.querySelector('.windows-install-link')?.href.endsWith('/SQL-Lab-Setup-0.3.1.exe')");});
     const image=await win.webContents.capturePage();await fs.writeFile(path.join(path.dirname(reportFile),'desktop-smoke.png'),image.toPNG());
     report.pass=report.checks.length;report.fail=0;report.finishedAt=new Date().toISOString();await fs.writeFile(reportFile,JSON.stringify(report,null,2));
   } catch(error) {

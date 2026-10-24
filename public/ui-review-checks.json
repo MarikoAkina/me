@@ -1,0 +1,73 @@
+{
+  "method": "Actual Chromium rendering in development-only iframe viewports; CSS media queries resolve at each recorded width.",
+  "widths": [
+    {
+      "viewport": 375,
+      "page": 375,
+      "editor": 0,
+      "result": 448,
+      "gridWidth": 375,
+      "gridScrollWidth": 375,
+      "screenshot": "docs/media/review-375.jpg",
+      "noPageOverflow": true
+    },
+    {
+      "viewport": 390,
+      "page": 390,
+      "editor": 434,
+      "result": 0,
+      "gridWidth": 0,
+      "gridScrollWidth": 0,
+      "screenshot": "docs/media/review-390.jpg",
+      "noPageOverflow": true
+    },
+    {
+      "viewport": 430,
+      "page": 430,
+      "editor": 681,
+      "result": 0,
+      "gridWidth": 0,
+      "gridScrollWidth": 0,
+      "screenshot": "docs/media/review-430.jpg",
+      "noPageOverflow": true
+    },
+    {
+      "viewport": 768,
+      "page": 768,
+      "editor": 157,
+      "result": 268,
+      "gridWidth": 333,
+      "gridScrollWidth": 333,
+      "screenshot": "docs/media/review-768.jpg",
+      "noPageOverflow": true
+    },
+    {
+      "viewport": 1280,
+      "page": 1280,
+      "editor": 157,
+      "result": 268,
+      "gridWidth": 735,
+      "gridScrollWidth": 735,
+      "screenshot": "docs/media/review-workbench.jpg",
+      "noPageOverflow": true
+    }
+  ],
+  "verifiedFlows": [
+    "统一列表 27 个唯一题目，保持原知识点分类和编号",
+    "第 23 题输入、执行、按实际结果批改并返回两个月份金额",
+    "展开相关表结构，参考答案初始折叠",
+    "430px 全屏编辑与退出",
+    "375px 复制月份单元格时显示可选择的手动复制文本 2026-09",
+    "刷新后第 23 题 SQL 草稿和 1/27 通过记录恢复",
+    "768px 恢复原版三栏，编辑器、结果与右侧批改反馈可访问；长内容区域内滚动"
+  ],
+  "limits": [
+    "不是 iPhone Safari 实机或触控、虚拟键盘验证",
+    "当前 HTTP 预览只验证复制降级窗口，未验证 HTTPS 系统剪贴板权限",
+    "宽结果区观察到横向滚动条；未完成手势滑动验收",
+    "本轮未生成或重新安装 Windows EXE"
+  ],
+  "version": "0.3.1",
+  "testedAt": "2026-10-24T11:36:50.591098+08:00",
+  "layout": "0.3.0 原版布局，仅修改模式切换栏并取消练习范围切换"
+}

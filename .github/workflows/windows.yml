@@ -52,6 +52,8 @@ jobs:
           if ($app.ExitCode -ne 0) { if (Test-Path $report) { Get-Content $report }; throw 'Desktop smoke test failed' }
           $result = Get-Content $report -Raw | ConvertFrom-Json
           if ($result.fail -ne 0 -or $result.pass -ne 10) { throw 'Incomplete desktop smoke checks' }
+          node desktop/clear-metadata.cjs --verify $installer.FullName $exe
+          if ($LASTEXITCODE -ne 0) { throw 'Final executable identity metadata check failed' }
           $metadata = @($installer.FullName, $exe) | ForEach-Object {
             $info = (Get-Item $_).VersionInfo
             $fields = [ordered]@{ file = (Split-Path $_ -Leaf); product = $info.ProductName; description = $info.FileDescription; company = $info.CompanyName; version = $info.ProductVersion; comments = $info.Comments; copyright = $info.LegalCopyright; originalFilename = $info.OriginalFilename }
@@ -84,5 +86,5 @@ jobs:
             gh release create $tag --repo $env:GITHUB_REPOSITORY --title "SQL LAB $version · Windows" --target $env:GITHUB_SHA --notes-file desktop/release-notes.md
             if ($LASTEXITCODE -ne 0) { throw 'Release creation failed' }
           }
-          gh release upload $tag release/SQL-Lab-Setup-*.exe release/SHA256SUMS.txt release/desktop-smoke.json release/metadata-audit.json --repo $env:GITHUB_REPOSITORY --clobber
+          gh release upload $tag release/SQL-Lab-Setup-*.exe release/SHA256SUMS.txt release/desktop-smoke.json release/metadata-audit.json --repo $env:GITHUB_REPOSITORY
           if ($LASTEXITCODE -ne 0) { throw 'Installer upload failed' }

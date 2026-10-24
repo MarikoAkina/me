@@ -8,9 +8,11 @@ files:
   - '**/*'
   - '!prepare.mjs'
   - '!release-notes.md'
+  - '!clear-metadata.cjs'
 asar: true
 npmRebuild: false
-copyright: Copyright © 2026 MarikoAkina
+copyright: ""
+afterPack: desktop/clear-metadata.cjs
 win:
   target:
     - target: nsis

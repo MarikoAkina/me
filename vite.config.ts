@@ -4,6 +4,7 @@ import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
   plugins: [react()],
+  server: { allowedHosts: ['terminal.local'] },
   resolve: {
     alias: { '@': fileURLToPath(new URL('./', import.meta.url)) },
   },

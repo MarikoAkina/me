@@ -1,0 +1,18 @@
+{
+  "baseCommit": "3e869aa26ef38e33b6cd398bd25bcd60db818b51",
+  "version": "0.3.1",
+  "byteIdenticalProductFiles": [
+    "main.jsx",
+    "index.html",
+    "components/sql-editor.jsx",
+    "components/ui/dialog.tsx"
+  ],
+  "stylesOutsideModeSwitchAndRemovedLessonFilter": "identical to 0.3.0",
+  "retainedChanges": [
+    "统一 27 题列表与手机选题入口文案",
+    "可选开发署名清理",
+    "支持说明与安装包版本提示"
+  ],
+  "engineAndStorageChanged": false,
+  "acceptance": "accepted for release on 2026-10-24"
+}
