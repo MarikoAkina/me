@@ -14,7 +14,7 @@
 [![Windows installer](https://github.com/MarikoAkina/sql-lab/actions/workflows/windows.yml/badge.svg)](https://github.com/MarikoAkina/sql-lab/actions/workflows/windows.yml)
 [版本与安装包](https://github.com/MarikoAkina/sql-lab/releases/latest) · [MIT License](LICENSE)
 
-**[在线体验](https://mysql-foundry.marikoakina.chatgpt.site)** · **[下载 Windows 安装版](https://github.com/MarikoAkina/sql-lab/releases/latest)** · **[阅读新手指南](docs/getting-started.md)** · **[打开文档目录](docs/README.md)**
+**[在线体验](https://akinaly.top/sql-lab/)** · **[下载 Windows 安装版](https://github.com/MarikoAkina/sql-lab/releases/latest)** · **[阅读新手指南](docs/getting-started.md)** · **[打开文档目录](docs/README.md)**
 
 > SQL LAB 是基础学习模拟器，兼容目标为 MySQL 8.4 的部分基础语法。字符串比较、类型转换、分组与自增等行为仍有差异，详见 [SQL 支持范围与兼容限制](docs/sql-compatibility.md)。
 
@@ -35,7 +35,7 @@
 | 使用方式 | 入口 | 说明 |
 | --- | --- | --- |
 | Windows 安装版 | [下载最新发布版本](https://github.com/MarikoAkina/sql-lab/releases/latest) | Windows 10 / 11 x64；安装后可离线练习，无需 Node.js、MySQL 或账号 |
-| 手机与电脑网页 | [打开公开体验网页](https://mysql-foundry.marikoakina.chatgpt.site) | 无需注册应用账号；练习记录保存在当前浏览器，也可自行部署 |
+| 手机与电脑网页 | [打开公开体验网页](https://akinaly.top/sql-lab/) | 无需注册应用账号；练习记录保存在当前浏览器，也可自行部署 |
 
 当前源码版本为 **0.3.1**，Windows 安装包由发布流程验证后提供。下载 `SQL-Lab-Setup-0.3.1.exe`，按向导安装并打开 SQL LAB。安装包暂未使用发布者证书，Windows 可能显示“未知发布者”；[发布页](https://github.com/MarikoAkina/sql-lab/releases/tag/v0.3.1)提供 SHA256 校验文件与安装检查报告。
 
