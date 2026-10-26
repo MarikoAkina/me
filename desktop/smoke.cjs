@@ -62,7 +62,7 @@ async function runSmoke(win, reportFile) {
       await until(`document.querySelector('.cm-content').textContent.replace(/\\s/g,'')===${JSON.stringify(answer.replace(/\s/g,''))}`);
       await click('工作台');await edit('SELECT COUNT(*) FROM customers;');await click('执行 SQL');await until("document.querySelector('.cell-button')?.textContent==='6'");
     });
-    await check('download dialog links to installer',async()=>{await js("document.querySelector('[aria-label=\"下载 Windows 安装版\"]').click()");await until("document.querySelector('.windows-install-link')?.href.endsWith('/SQL-Lab-Setup-1.0.0.exe')");});
+    await check('download dialog links to installer',async()=>{await js("document.querySelector('[aria-label=\"下载 Windows 安装版\"]').click()");await until("document.querySelector('.windows-install-link')?.href.endsWith('/SQL-Lab-Setup-1.0.1.exe')");});
     await check('installed updater bridge and check button',async()=>{const state=await js("window.sqlLabUpdates.getState()");if(state.currentVersion!==app.getVersion())throw new Error('Bridge version mismatch');await until("!!document.querySelector('[aria-label=\"检查更新\"]')");});
     const installer=process.argv.find(a=>a.startsWith('--smoke-installer='))?.slice('--smoke-installer='.length);
     if(installer)await check('real NSIS update download and SHA512 verification',async()=>{report.updateDownload=await require('./update-download-smoke.cjs').verifyDownload(installer);});

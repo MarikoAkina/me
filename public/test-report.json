@@ -1,7 +1,7 @@
 {
   "product": "SQL LAB · MySQL 基础学习模拟器",
-  "version": "1.0.0",
-  "testedAt": "2026-10-26T21:07:21.672633+09:00",
+  "version": "1.0.1",
+  "testedAt": "2026-10-26T20:30:49.880440+08:00",
   "summary": {
     "tests": 191,
     "pass": 191,
