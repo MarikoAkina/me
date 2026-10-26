@@ -1,7 +1,7 @@
 {
   "name": "sql-lab",
   "productName": "SQL LAB",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "MySQL basics learning simulator",
   "main": "main.cjs",
   "license": "MIT",

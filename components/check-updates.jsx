@@ -24,6 +24,7 @@ export default function CheckUpdates({busy, save}) {
     }
   }, [api, busy, save, state.version]);
   useEffect(() => {
+    if (state.phase === 'error') applying.current = false;
     if (state.phase === 'ready' && !busy) void apply();
   }, [state.phase, busy, apply]);
   const check = useCallback(async () => {

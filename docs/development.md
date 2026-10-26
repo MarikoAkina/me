@@ -86,7 +86,7 @@ npm run desktop
 npm run dist:windows
 ```
 
-当前版本输出 `release/SQL-Lab-Setup-0.3.2.exe`。[electron-builder.yml](../electron-builder.yml)配置 NSIS 安装向导；[desktop/prepare.mjs](../desktop/prepare.mjs)复制网页构建和许可证到应用目录。
+当前版本输出 `release/SQL-Lab-Setup-0.3.3.exe`。[electron-builder.yml](../electron-builder.yml)配置 NSIS 安装向导；[desktop/prepare.mjs](../desktop/prepare.mjs)复制网页构建和许可证到应用目录。
 
 桌面版与网页共用前端和 SQL 引擎。渲染器关闭 Node 集成，启用隔离与沙箱；固定的 `sqllab://app` 来源保持本地存储来源一致，本地协议只读取应用资源，外部链接使用系统浏览器打开 HTTPS 地址。
 
@@ -101,4 +101,4 @@ npm run dist:windows
 
 新增练习时维护 `lib/sql/lesson-meta.mjs` 的总数与连续题号；原编号保持稳定。附加样本使用题目的 `setup`，通过 `createLessonState` 创建独立副本；同时更新结果判题、保存恢复与 UI 验收。
 
-0.3.2 使用 `electron-updater`，运行依赖单独锁定在 `desktop/package-lock.json`；更新菜单通过受限 preload/IPC 调用主进程，不向网页暴露 Node 或任意下载/执行接口。正式发布前请阅读 [更新与发布规则](updates.md)。
+0.3.3 使用 `electron-updater`，运行依赖单独锁定在 `desktop/package-lock.json`；更新菜单通过受限 preload/IPC 调用主进程，不向网页暴露 Node 或任意下载/执行接口。正式发布前请阅读 [更新与发布规则](updates.md)。

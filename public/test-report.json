@@ -1,6 +1,6 @@
 {
   "product": "SQL LAB · MySQL 基础学习模拟器",
-  "testedAt": "2026-10-26T08:14:12.981305+08:00",
+  "testedAt": "2026-10-26T09:43:23.484008+08:00",
   "summary": {
     "tests": 172,
     "pass": 172,
@@ -182,7 +182,7 @@
         "网页检查按钮保存尚未延时落盘的草稿并显示最新状态",
         "GitHub 新版但站点未部署时明确提示管理员部署",
         "更新网络失败后保留草稿并可再次检查",
-        "桌面更新就绪后实际保存最新草稿才调用安装，重复点击不重复安装"
+        "桌面保存最新草稿后才调用安装，安装异步失败后可再次重试"
       ]
     },
     {
@@ -248,7 +248,7 @@
   "mobileFeedback": "手机结果页直接显示批改反馈、继续编辑、提示和下一题，DOM 操作测试通过。",
   "distribution": "独立 React/Vite 客户端项目：锁定依赖安装、SQL 与 DOM 验收。",
   "desktopVerification": "安装包通过 Windows 发布流程构建、实际安装与 10 项检查后发布；具体结果见同版本 release 的 desktop-smoke.json。",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "lessonCount": 27,
   "addedLessons": [
     16,
