@@ -1,0 +1,45 @@
+name: Windows upgrade acceptance
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/update-acceptance.yml'
+      - 'tests/upgrade-acceptance.cjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-release-upgrade:
+    runs-on: windows-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install published 0.3.2 fixture
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $assets = Join-Path $env:RUNNER_TEMP 'upgrade-assets'
+          New-Item -ItemType Directory -Force $assets | Out-Null
+          gh release download v0.3.2 --repo $env:GITHUB_REPOSITORY --pattern SQL-Lab-Setup-0.3.2.exe --pattern SHA256SUMS.txt --dir $assets
+          if ($LASTEXITCODE -ne 0) { throw 'Fixture download failed' }
+          $installer = Join-Path $assets 'SQL-Lab-Setup-0.3.2.exe'
+          $expected = (Get-Content (Join-Path $assets 'SHA256SUMS.txt') | Where-Object { $_ -match 'SQL-Lab-Setup-0.3.2.exe$' }).Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)[0]
+          if ((Get-FileHash $installer -Algorithm SHA256).Hash.ToLower() -ne $expected) { throw 'Fixture checksum mismatch' }
+          $installPath = Join-Path $env:RUNNER_TEMP 'sql-lab-upgrade-test'
+          $setup = Start-Process $installer -ArgumentList @('/S', "/D=$installPath") -Wait -PassThru
+          if ($setup.ExitCode -ne 0) { throw 'Fixture installation failed' }
+          "SQL_LAB_UPGRADE_EXE=$(Join-Path $installPath 'SQL LAB.exe')" | Out-File $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Upgrade through the real application button
+        run: node tests/upgrade-acceptance.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-upgrade-acceptance
+          path: upgrade-results/
