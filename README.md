@@ -135,6 +135,8 @@ SQL 使用 **node-sql-parser 的 MySQL AST 与自有结构化执行器**，金�
 
 **0.3.3 源码验收：172 项自动化检查通过，0 项失败。** Windows 安装检查由发布工作流单独执行，结果见发布报告。
 
+已补齐公开版本 **0.3.2 → 0.3.3** 的 Windows CI 自动升级验收，**7 项通过**：使用真实安装包和 GitHub 更新源，点击应用内按钮，确认自动下载安装与重新启动，并恢复客户数据、SQL 草稿和练习进度。[升级报告](public/windows-upgrade-acceptance.json) · [工作流记录](https://github.com/MarikoAkina/sql-lab/actions/runs/40260121753)。
+
 查看 [仓库测试报告](public/test-report.json)、[Windows 发布报告](https://github.com/MarikoAkina/sql-lab/releases/download/v0.3.3/desktop-smoke.json)和 [GitHub Actions](https://github.com/MarikoAkina/sql-lab/actions)。测试组成、检查命令和报告边界见 [测试与验收](docs/testing.md)。
 
 尚未完成真实 MySQL 8.4 服务器逐条对照，以及真实 iPhone Safari、虚拟键盘与触控流程验收。DOM 测试中的屏幕宽度检查不等同于实机布局验证。

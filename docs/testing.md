@@ -8,7 +8,11 @@
 
 2026-10-26，本地 `npm test` 共 172 项通过：原 149 项、4 项更新 UI 集成、19 项更新与清单检查。新增 UI 检查实际确认草稿保存、未部署提示、离线失败恢复和保存后才调用安装。生产根路径及 `/sql-lab/` 子路径构建分别检查。
 
-Windows 工作流本版配置 12 项检查：沿用下方 10 项，增加原生更新桥接和真实 NsisUpdater 本地源下载。客户端旧版本为模拟值，不执行不同公开版本间的自动安装重启。是否完成以 [0.3.3 报告](https://github.com/MarikoAkina/sql-lab/releases/download/v0.3.3/desktop-smoke.json)为准。验证边界及操作方法见 [更新指南](updates.md)。
+Windows 工作流本版配置 12 项检查：沿用下方 10 项，增加原生更新桥接和真实 NsisUpdater 本地源下载。这 12 项中的下载检查采用模拟客户端版本；完整跨版本升级由下面的独立验收覆盖。是否完成以 [0.3.3 报告](https://github.com/MarikoAkina/sql-lab/releases/download/v0.3.3/desktop-smoke.json)为准。验证边界及操作方法见 [更新指南](updates.md)。
+
+2026-10-26，另完成公开 **0.3.2 → 0.3.3** 自动升级验收，7 项通过，0 项失败。该工作流在全新的 Windows runner 安装原始 0.3.2 发布包，使用应用真实“检查更新”按钮和 GitHub 正式源；没有替换客户端版本或更新源。确认自动下载、退出、安装替换、自动启动，并再次打开后验证客户记录、SQL 草稿、练习草稿和通过进度。见 [原始升级报告](../public/windows-upgrade-acceptance.json)和 [Actions](https://github.com/MarikoAkina/sql-lab/actions/runs/40260121753)。
+
+此次升级前先等待保存完成；尚未落盘草稿的保存时序由 DOM 检查覆盖，不能将本次 CI 解释为断电恢复验收。普通用户 Windows 10/11、UAC 交互和 iPhone Safari 实机仍需验证。
 
 下方保留 0.3.1 历史验收记录。
 

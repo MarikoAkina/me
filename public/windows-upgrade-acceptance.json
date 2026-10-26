@@ -1,0 +1,48 @@
+{
+  "from": "0.3.2",
+  "to": "0.3.3",
+  "platform": "win32",
+  "mockedVersion": false,
+  "mockedFeed": false,
+  "startedAt": "2026-10-26T02:39:26.090Z",
+  "checks": [
+    {
+      "name": "published old installer has real version 0.3.2",
+      "pass": true
+    },
+    {
+      "name": "published old app loads its real updater and SQL Worker",
+      "pass": true
+    },
+    {
+      "name": "workspace write, SQL draft and exercise progress are saved before upgrading",
+      "pass": true
+    },
+    {
+      "name": "real update button downloads the published newer version and exits",
+      "pass": true
+    },
+    {
+      "name": "installer replaces the executable and automatically relaunches the app",
+      "pass": true
+    },
+    {
+      "name": "new version restores the written customer and unsaved-timer SQL draft",
+      "pass": true
+    },
+    {
+      "name": "new version restores exercise draft and passing progress",
+      "pass": true
+    }
+  ],
+  "observedUpdatePhases": [
+    "idle",
+    "checking",
+    "available",
+    "downloading"
+  ],
+  "automaticRestartObserved": true,
+  "pass": 7,
+  "fail": 0,
+  "finishedAt": "2026-10-26T02:39:50.455Z"
+}

@@ -68,4 +68,8 @@ sudo rsync -a /var/backups/sql-lab/before-update-XXXXXXXX/site/ /var/www/akinaly
 
 自动化检查覆盖比较、重入、进度、下载完成前禁止安装、保存后调用安装、保存失败保护、网络错误、网页未部署提示和最终文件哈希生成。
 
-Windows CI 配置真实安装与本地更新源下载检查：将测试客户端版本模拟为 0.0.0，使用真实 NsisUpdater 下载本次构建的安装包并核对 SHA512。它不等于已验证两次不同公开版本之间的完整自动替换和重新启动；普通 Windows 10/11 的完整升级、UAC、断电恢复，以及 iPhone Safari 实机仍需补充验证。以实际 CI 报告为准。
+首批 12 项 Windows 安装检查包含本地更新源下载，使用模拟客户端版本 0.0.0；其报告保持原样。
+
+2026-10-26 已追加公开 **0.3.2 → 0.3.3** 完整升级的独立 Windows CI 验收，**7 项通过，0 项失败**。安装公开旧包后，通过应用真实“检查更新”按钮从 GitHub 下载新版，观察到旧进程退出、安装器替换程序、新进程自动启动；再次打开后，客户数据、SQL 草稿、练习草稿和通过记录恢复。未模拟版本号、未替换更新源，见 [原始报告](../public/windows-upgrade-acceptance.json)与 [工作流](https://github.com/MarikoAkina/sql-lab/actions/runs/40260121753)。
+
+本次升级前确认数据已保存；未落盘草稿的保护由 DOM 检查覆盖。普通 Windows 10/11 用户机器上的权限、UAC、断电与恢复，以及 iPhone Safari 实机仍需补充验证。CI 的成功不替代这些设备与异常情形的验收。
