@@ -4,7 +4,7 @@
 
 # SQL LAB
 
-> **0.3.1**：统一 27 道学习练习，调整工作台与学习模式切换栏。保留 0.3.0 的整体界面和已有数据格式。[版本说明与验证](docs/ui-review.md)。
+> **0.3.2**：新增检查更新、Windows 自动下载安装和网页版本检查。保留 27 道练习及原数据格式。[更新与服务器部署](docs/updates.md)。
 
 **面向零基础与财务管理学习者的中文 MySQL 基础练习工作台。**
 
@@ -37,9 +37,11 @@
 | Windows 安装版 | [下载最新发布版本](https://github.com/MarikoAkina/sql-lab/releases/latest) | Windows 10 / 11 x64；安装后可离线练习，无需 Node.js、MySQL 或账号 |
 | 手机与电脑网页 | [打开公开体验网页](https://akinaly.top/sql-lab/) | 无需注册应用账号；练习记录保存在当前浏览器，也可自行部署 |
 
-当前源码版本为 **0.3.1**，Windows 安装包由发布流程验证后提供。下载 `SQL-Lab-Setup-0.3.1.exe`，按向导安装并打开 SQL LAB。安装包暂未使用发布者证书，Windows 可能显示“未知发布者”；[发布页](https://github.com/MarikoAkina/sql-lab/releases/tag/v0.3.1)提供 SHA256 校验文件与安装检查报告。
+当前源码版本为 **0.3.2**，Windows 安装包由发布流程验证后提供。下载 `SQL-Lab-Setup-0.3.2.exe`，按向导安装并打开 SQL LAB。安装包暂未使用发布者证书，Windows 可能显示“未知发布者”；[发布页](https://github.com/MarikoAkina/sql-lab/releases/tag/v0.3.2)提供 SHA256 校验文件与安装检查报告。
 
 网页已开放为公开试用。数据仍分别保存在各自浏览器，不会自动跨设备同步。自行部署和本地运行见 [开发指南](docs/development.md)。
+
+0.3.1 及以前需先手动安装一次 0.3.2；以后可用顶部或帮助菜单“检查更新”。AWS 试用站的部署命令见 [更新与部署指南](docs/updates.md)。
 
 ## 界面预览
 
@@ -79,7 +81,7 @@ WHERE city = '武汉';
 | 财务示例 | 客户、订单、费用与预算练习；金额使用十进制计算，保留 NULL、重复值和未匹配记录 |
 | 学习与批改 | 27 道渐进练习；查询比较实际结果，写入练习检查独立数据副本的最终状态 |
 | 保存与迁移 | IndexedDB 自动保存、完整 JSON 备份与恢复、SQL 脚本导入导出、结果复制与 CSV 导出 |
-| Windows 离线版 | 与网页共用前端和 SQL 引擎，提供安装程序、原生菜单与本地数据保存 |
+| Windows 离线版 | 与网页共用前端和 SQL 引擎，提供安装程序、原生菜单、本地保存与手动触发的自动更新 |
 
 SQL 使用 **node-sql-parser 的 MySQL AST 与自有结构化执行器**，金额使用 **decimal.js**，执行任务放在 **Web Worker** 中。支持语法、行为差异与容量上限集中说明在 [兼容文档](docs/sql-compatibility.md)。
 
@@ -131,9 +133,9 @@ SQL 使用 **node-sql-parser 的 MySQL AST 与自有结构化执行器**，金�
 
 ## 验证状态
 
-**0.3.1 源码验收：149 项自动化检查通过，0 项失败。** Windows 安装检查由发布工作流单独执行，结果见发布报告。
+**0.3.2 源码验收：172 项自动化检查通过，0 项失败。** Windows 安装检查由发布工作流单独执行，结果见发布报告。
 
-查看 [仓库测试报告](public/test-report.json)、[Windows 发布报告](https://github.com/MarikoAkina/sql-lab/releases/download/v0.3.1/desktop-smoke.json)和 [GitHub Actions](https://github.com/MarikoAkina/sql-lab/actions)。测试组成、检查命令和报告边界见 [测试与验收](docs/testing.md)。
+查看 [仓库测试报告](public/test-report.json)、[Windows 发布报告](https://github.com/MarikoAkina/sql-lab/releases/download/v0.3.2/desktop-smoke.json)和 [GitHub Actions](https://github.com/MarikoAkina/sql-lab/actions)。测试组成、检查命令和报告边界见 [测试与验收](docs/testing.md)。
 
 尚未完成真实 MySQL 8.4 服务器逐条对照，以及真实 iPhone Safari、虚拟键盘与触控流程验收。DOM 测试中的屏幕宽度检查不等同于实机布局验证。
 

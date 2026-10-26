@@ -68,7 +68,7 @@ npm run preview
 
 生产部署将 `dist/` 放在静态网站服务的根路径，并使用 HTTPS。运行时浏览器需要支持 Web Worker、IndexedDB 与现代 JavaScript，不需要数据库服务或后端 API。
 
-当前资源路径按站点根目录配置。部署到 GitHub Pages 等子路径时，需要统一配置 Vite 的 `base`、HTML 和 manifest 中以 `/` 开头的路径；当前文档不提供未经配置即可使用的子路径部署承诺。
+根路径使用默认构建。`/sql-lab/` 子路径使用 `npm run build -- --base=/sql-lab/`；manifest、帮助报告链接和版本清单已适配。AWS 预构建包部署、回滚与客户端检查更新见 [更新指南](updates.md)。
 
 网页提供添加到主屏幕所需的图标和 manifest，当前未实现完整离线缓存。静态网页的访问权限由托管平台管理，与浏览器中的个人练习数据分别处理。
 
@@ -86,17 +86,19 @@ npm run desktop
 npm run dist:windows
 ```
 
-当前版本输出 `release/SQL-Lab-Setup-0.3.1.exe`。[electron-builder.yml](../electron-builder.yml)配置 NSIS 安装向导；[desktop/prepare.mjs](../desktop/prepare.mjs)复制网页构建和许可证到应用目录。
+当前版本输出 `release/SQL-Lab-Setup-0.3.2.exe`。[electron-builder.yml](../electron-builder.yml)配置 NSIS 安装向导；[desktop/prepare.mjs](../desktop/prepare.mjs)复制网页构建和许可证到应用目录。
 
 桌面版与网页共用前端和 SQL 引擎。渲染器关闭 Node 集成，启用隔离与沙箱；固定的 `sqllab://app` 来源保持本地存储来源一致，本地协议只读取应用资源，外部链接使用系统浏览器打开 HTTPS 地址。
 
 ## 持续检查与发布
 
 - [Checks 工作流](../.github/workflows/ci.yml)：提交和拉取请求触发，安装锁定依赖，运行 `npm test` 与生产构建。
-- [Windows installer 工作流](../.github/workflows/windows.yml)：主分支相关源码变更或手动触发，构建安装包、实际安装并启动应用，完成 10 项操作检查后发布 EXE、SHA256 和检查报告。
+- [Windows installer 工作流](../.github/workflows/windows.yml)：主分支相关源码变更或手动触发，构建安装包、实际安装并启动应用，完成 12 项检查后发布 EXE、网页 ZIP、更新清单、SHA256 和检查报告。
 
 发布新版本时同步根目录与 `desktop/package.json` 的版本、[下载信息](../lib/release.mjs)、[发布说明](../desktop/release-notes.md)以及文档中的版本描述。`desktop/ui/`、`dist/` 和 `release/` 是生成目录，不作为源码提交。
 
 安装包当前没有 Authenticode 发布者证书。发布验收和未完成的实机验证见 [测试与验收](testing.md)。
 
 新增练习时维护 `lib/sql/lesson-meta.mjs` 的总数与连续题号；原编号保持稳定。附加样本使用题目的 `setup`，通过 `createLessonState` 创建独立副本；同时更新结果判题、保存恢复与 UI 验收。
+
+0.3.2 使用 `electron-updater`，运行依赖单独锁定在 `desktop/package-lock.json`；更新菜单通过受限 preload/IPC 调用主进程，不向网页暴露 Node 或任意下载/执行接口。正式发布前请阅读 [更新与发布规则](updates.md)。

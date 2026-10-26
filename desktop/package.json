@@ -1,8 +1,11 @@
 {
   "name": "sql-lab",
   "productName": "SQL LAB",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "MySQL basics learning simulator",
   "main": "main.cjs",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "electron-updater": "6.8.11"
+  }
 }

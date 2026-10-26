@@ -1,6 +1,6 @@
 {
   "name": "sql-lab",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "private": true,
   "engines": {
     "node": ">=22.13.0"
@@ -10,15 +10,16 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "vite preview",
-    "test": "npm run test:acceptance && npm run test:desktop",
+    "test": "npm run test:acceptance && npm run test:desktop && npm run test:updates",
     "test:acceptance": "node tests/engine.test.mjs && node --test tests/expansion.test.mjs && node tests/storage.test.mjs && node tests/ui.test.mjs",
     "test:engine": "node tests/engine.test.mjs && node --test tests/expansion.test.mjs",
     "test:storage": "node tests/storage.test.mjs",
     "test:ui": "node tests/ui.test.mjs",
-    "desktop:prepare": "npm run build && node desktop/prepare.mjs",
+    "desktop:prepare": "npm run build && npm ci --prefix desktop && node desktop/prepare.mjs",
     "desktop": "npm run desktop:prepare && electron desktop",
     "dist:windows": "npm run desktop:prepare && electron-builder --config electron-builder.yml --win nsis --x64 --publish never",
-    "test:desktop": "node --test tests/desktop.test.cjs"
+    "test:desktop": "node --test tests/desktop.test.cjs",
+    "test:updates": "node --test tests/updates.test.mjs tests/updater.test.cjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

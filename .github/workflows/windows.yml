@@ -46,12 +46,14 @@ jobs:
           if ($setup.ExitCode -ne 0) { throw "Installer failed: $($setup.ExitCode)" }
           $exe = Join-Path $installPath 'SQL LAB.exe'
           if (!(Test-Path $exe)) { throw 'Installed executable missing' }
+          node desktop/clear-metadata.cjs --verify $installer.FullName $exe
+          if ($LASTEXITCODE -ne 0) { throw 'Final executable metadata check failed' }
           $report = Join-Path $env:GITHUB_WORKSPACE 'release/desktop-smoke.json'
-          $app = Start-Process -FilePath $exe -ArgumentList @('--smoke-test', "--smoke-report=$report") -PassThru
-          if (!$app.WaitForExit(120000)) { $app.Kill(); throw 'Desktop smoke test timed out' }
+          $app = Start-Process -FilePath $exe -ArgumentList @('--smoke-test', "--smoke-report=$report", "--smoke-installer=$($installer.FullName)") -PassThru
+          if (!$app.WaitForExit(240000)) { $app.Kill(); throw 'Desktop smoke test timed out' }
           if ($app.ExitCode -ne 0) { if (Test-Path $report) { Get-Content $report }; throw 'Desktop smoke test failed' }
           $result = Get-Content $report -Raw | ConvertFrom-Json
-          if ($result.fail -ne 0 -or $result.pass -ne 10) { throw 'Incomplete desktop smoke checks' }
+          if ($result.fail -ne 0 -or $result.pass -ne 12) { throw 'Incomplete desktop smoke checks' }
           node desktop/clear-metadata.cjs --verify $installer.FullName $exe
           if ($LASTEXITCODE -ne 0) { throw 'Final executable identity metadata check failed' }
           $metadata = @($installer.FullName, $exe) | ForEach-Object {
@@ -62,8 +64,17 @@ jobs:
             [pscustomobject]$fields
           }
           $metadata | ConvertTo-Json -Depth 5 | Set-Content release/metadata-audit.json -Encoding utf8NoBOM
-          $hash = (Get-FileHash $installer.FullName -Algorithm SHA256).Hash.ToLower()
-          "$hash  $($installer.Name)" | Set-Content release/SHA256SUMS.txt -Encoding utf8NoBOM
+          node desktop/update-manifest.cjs release
+          if ($LASTEXITCODE -ne 0) { throw 'Update manifest generation failed' }
+      - name: Build website for /sql-lab/
+        shell: pwsh
+        run: |
+          npm run build -- --base=/sql-lab/
+          if ($LASTEXITCODE -ne 0) { throw 'Website build failed' }
+          $version = (Get-Content desktop/package.json -Raw | ConvertFrom-Json).version
+          Compress-Archive -Path dist/* -DestinationPath "release/SQL-Lab-Web-$version.zip"
+          node desktop/update-manifest.cjs release
+          if ($LASTEXITCODE -ne 0) { throw 'Final release hash generation failed' }
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -74,6 +85,8 @@ jobs:
             release/desktop-smoke.json
             release/desktop-smoke.png
             release/metadata-audit.json
+            release/latest.yml
+            release/SQL-Lab-Web-*.zip
       - name: Publish verified installer
         shell: pwsh
         env:
@@ -81,10 +94,13 @@ jobs:
         run: |
           $version = (Get-Content desktop/package.json -Raw | ConvertFrom-Json).version
           $tag = "v$version"
-          gh release view $tag --repo $env:GITHUB_REPOSITORY *> $null
+          $draft = gh release view $tag --repo $env:GITHUB_REPOSITORY --json isDraft --jq .isDraft 2>$null
+          if ($LASTEXITCODE -eq 0 -and $draft -ne 'true') { throw 'Version already published. Increase the version; existing releases are preserved.' }
           if ($LASTEXITCODE -ne 0) {
-            gh release create $tag --repo $env:GITHUB_REPOSITORY --title "SQL LAB $version · Windows" --target $env:GITHUB_SHA --notes-file desktop/release-notes.md
-            if ($LASTEXITCODE -ne 0) { throw 'Release creation failed' }
+            gh release create $tag --draft --repo $env:GITHUB_REPOSITORY --title "SQL LAB $version · Windows" --target $env:GITHUB_SHA --notes-file desktop/release-notes.md
+            if ($LASTEXITCODE -ne 0) { throw 'Release draft creation failed' }
           }
-          gh release upload $tag release/SQL-Lab-Setup-*.exe release/SHA256SUMS.txt release/desktop-smoke.json release/metadata-audit.json --repo $env:GITHUB_REPOSITORY
-          if ($LASTEXITCODE -ne 0) { throw 'Installer upload failed' }
+          gh release upload $tag release/SQL-Lab-Setup-*.exe release/SQL-Lab-Web-*.zip release/latest.yml release/SHA256SUMS.txt release/desktop-smoke.json release/metadata-audit.json --clobber --repo $env:GITHUB_REPOSITORY
+          if ($LASTEXITCODE -ne 0) { throw 'Release upload failed' }
+          gh release edit $tag --draft=false --latest --repo $env:GITHUB_REPOSITORY
+          if ($LASTEXITCODE -ne 0) { throw 'Release publication failed' }

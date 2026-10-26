@@ -6,6 +6,7 @@
 | --- | --- | --- | --- |
 | Electron | 桌面运行时 | MIT | https://github.com/electron/electron |
 | electron-builder / NSIS | 桌面安装打包 | MIT / zlib 及工具各自许可证 | https://github.com/electron-userland/electron-builder |
+| electron-updater | 检查、下载和安装桌面更新 | MIT | https://github.com/electron-userland/electron-builder |
 | React / React DOM | 界面 | MIT | https://github.com/facebook/react |
 | Vite | 开发与构建 | MIT | https://github.com/vitejs/vite |
 | CodeMirror 6 | SQL 编辑器 | MIT | https://github.com/codemirror |

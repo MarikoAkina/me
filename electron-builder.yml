@@ -9,6 +9,8 @@ files:
   - '!prepare.mjs'
   - '!release-notes.md'
   - '!clear-metadata.cjs'
+  - '!update-manifest.cjs'
+  - '!package-lock.json'
 asar: true
 npmRebuild: false
 copyright: ""
@@ -28,5 +30,10 @@ nsis:
   shortcutName: SQL LAB
   runAfterFinish: false
   deleteAppDataOnUninstall: false
+  differentialPackage: false
   installerLanguages: [zh_CN, en_US]
-publish: null
+publish:
+  provider: github
+  owner: MarikoAkina
+  repo: sql-lab
+  releaseType: release

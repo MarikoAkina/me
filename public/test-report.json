@@ -1,9 +1,9 @@
 {
   "product": "SQL LAB · MySQL 基础学习模拟器",
-  "testedAt": "2026-10-24T11:36:50.591098+08:00",
+  "testedAt": "2026-10-26T08:14:12.981305+08:00",
   "summary": {
-    "tests": 149,
-    "pass": 149,
+    "tests": 172,
+    "pass": 172,
     "fail": 0
   },
   "suites": [
@@ -157,8 +157,8 @@
     },
     {
       "suite": "DOM 页面集成",
-      "tests": 18,
-      "pass": 18,
+      "tests": 22,
+      "pass": 22,
       "fail": 0,
       "cases": [
         "工作台实际挂载，首次 SELECT 返回 5 位客户",
@@ -178,7 +178,11 @@
         "卸载再挂载等价刷新：数据、草稿、历史、进度恢复",
         "SQL 文件失败导入全部回退，合法文件可导入",
         "完整备份恢复实际替换数据库与脚本，损坏备份拒绝",
-        "Windows 安装入口和下载链接可在数据面板打开"
+        "Windows 安装入口和下载链接可在数据面板打开",
+        "网页检查按钮保存尚未延时落盘的草稿并显示最新状态",
+        "GitHub 新版但站点未部署时明确提示管理员部署",
+        "更新网络失败后保留草稿并可再次检查",
+        "桌面更新就绪后实际保存最新草稿才调用安装，重复点击不重复安装"
       ]
     },
     {
@@ -194,6 +198,33 @@
         "packaged module responses preserve code and correct MIME type",
         "missing packaged files fail rather than falling back to arbitrary HTML",
         "desktop protocol accepts HEAD and rejects write requests"
+      ]
+    },
+    {
+      "suite": "检查更新与发布清单",
+      "tests": 19,
+      "pass": 19,
+      "fail": 0,
+      "cases": [
+        "updater pins GitHub repository, stable releases and full verified downloads",
+        "parallel clicks do not start duplicate update checks",
+        "download progress and ready status do not install before renderer saves",
+        "install cannot run without a fully downloaded verified update",
+        "no-update and unsupported environments have clear statuses",
+        "checksum errors stop installation and permit retry",
+        "rejected checks return an error state and never leak raw paths",
+        "installer invocation failures are reported instead of claiming success",
+        "semantic versions handle numeric components and never downgrade",
+        "only stable release tags are accepted",
+        "same versions report current",
+        "GitHub newer than server requires deployment, not a misleading browser update",
+        "deployed version is reloadable even while GitHub is unreachable",
+        "version requests preserve the subpath and bypass browser cache",
+        "missing manifests and invalid releases report failure without inventing a new version",
+        "rate limited updates are a recoverable error",
+        "data flush completes before install or reload",
+        "failed data save prevents installing or reloading",
+        "update manifest hashes describe the final installer and are re-readable"
       ]
     }
   ],
@@ -217,7 +248,7 @@
   "mobileFeedback": "手机结果页直接显示批改反馈、继续编辑、提示和下一题，DOM 操作测试通过。",
   "distribution": "独立 React/Vite 客户端项目：锁定依赖安装、SQL 与 DOM 验收。",
   "desktopVerification": "安装包通过 Windows 发布流程构建、实际安装与 10 项检查后发布；具体结果见同版本 release 的 desktop-smoke.json。",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "lessonCount": 27,
   "addedLessons": [
     16,
@@ -233,5 +264,9 @@
     26,
     27
   ],
-  "expansionVerification": "35 项独立扩展用例；全部 27 道参考答案执行通过；12 道新增题按实际结果批改；旧题草稿与新题备份恢复通过。"
+  "expansionVerification": "35 项独立扩展用例；全部 27 道参考答案执行通过；12 道新增题按实际结果批改；旧题草稿与新题备份恢复通过。",
+  "limitations": [
+    "Windows CI 的本地更新源下载以模拟旧客户端版本执行，不代表不同公开版本间完整安装重启验收。",
+    "真实 MySQL 8.4 对照与 iPhone Safari 完整实机验证仍待完成。"
+  ]
 }
