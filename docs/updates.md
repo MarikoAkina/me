@@ -36,7 +36,7 @@ sha256sum --ignore-missing -c SHA256SUMS.txt
 unzip -q SQL-Lab-Web-0.4.0.zip -d site
 curl -fL --retry 3 https://raw.githubusercontent.com/MarikoAkina/sql-lab/v0.4.0/scripts/deploy-web.sh -o deploy-web.sh
 sudo bash deploy-web.sh "$sql_lab_update_dir/site"
-curl -fsS -H 'Host: akinaly.top' http://127.0.0.1/sql-lab/version.json
+curl -fsS https://akinaly.top/sql-lab/version.json
 ```
 
 逐条运行；任意一步失败就停止，不要执行后面的部署。版本应显示 `{"version":"0.4.0"}`。默认部署目录沿用 `/var/www/akinaly/sql-lab`，域名和 Nginx `root` 配置需与此前部署一致。不修改 80/443、证书和其他服务，不需要重启 Nginx。
@@ -73,3 +73,5 @@ sudo rsync -a /var/backups/sql-lab/before-update-XXXXXXXX/site/ /var/www/akinaly
 2026-10-26 已追加公开 **0.3.2 → 0.3.3** 完整升级的独立 Windows CI 验收，**7 项通过，0 项失败**。安装公开旧包后，通过应用真实“检查更新”按钮从 GitHub 下载新版，观察到旧进程退出、安装器替换程序、新进程自动启动；再次打开后，客户数据、SQL 草稿、练习草稿和通过记录恢复。未模拟版本号、未替换更新源，见 [原始报告](../public/windows-upgrade-acceptance.json)与 [工作流](https://github.com/MarikoAkina/sql-lab/actions/runs/40260121753)。
 
 本次升级前确认数据已保存；未落盘草稿的保护由 DOM 检查覆盖。普通 Windows 10/11 用户机器上的权限、UAC、断电与恢复，以及 iPhone Safari 实机仍需补充验证。CI 的成功不替代这些设备与异常情形的验收。
+
+0.4.0 补充验收：公开 0.3.3 → 0.4.0 完整自动升级在 Windows CI 实际执行，**8 项全部通过**，没有模拟版本或更新源。升级保留原数据、草稿和进度，并核对新版 45 题与独立示例数据；[原始报告](../public/windows-upgrade-acceptance-0.4.json) · [工作流](https://github.com/MarikoAkina/sql-lab/actions/runs/40265313715)。

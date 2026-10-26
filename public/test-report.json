@@ -268,6 +268,18 @@
   "limitations": [
     "未完成真实 MySQL 8.4 差分",
     "未完成真实 iPhone Safari 中文输入法、横竖屏与系统工具栏验收",
-    "Windows 本版本安装检查以 Release 报告为准；旧的 0.3.2→0.3.3 报告保留原样"
-  ]
+    "Windows 验证来自托管 CI；普通用户机器的 UAC、断电、权限等仍待实机验证"
+  ],
+  "windowsValidation": {
+    "installedChecks": 12,
+    "installedFailures": 0,
+    "upgradeFrom": "0.3.3",
+    "upgradeTo": "0.4.0",
+    "upgradeChecks": 8,
+    "upgradeFailures": 0,
+    "mockedFeed": false,
+    "mockedVersion": false,
+    "installerRun": "https://github.com/MarikoAkina/sql-lab/actions/runs/40264868642",
+    "upgradeRun": "https://github.com/MarikoAkina/sql-lab/actions/runs/40265313715"
+  }
 }
