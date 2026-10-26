@@ -1,10 +1,10 @@
 {
   "product": "SQL LAB · MySQL 基础学习模拟器",
-  "version": "0.4.0",
-  "testedAt": "2026-10-26T03:31:11.526898+00:00",
+  "version": "1.0.0",
+  "testedAt": "2026-10-26T21:07:21.672633+09:00",
   "summary": {
-    "tests": 190,
-    "pass": 190,
+    "tests": 191,
+    "pass": 191,
     "fail": 0
   },
   "suites": [
@@ -159,8 +159,8 @@
     },
     {
       "suite": "DOM 页面集成",
-      "tests": 27,
-      "pass": 27,
+      "tests": 28,
+      "pass": 28,
       "fail": 0,
       "cases": [
         "工作台实际挂载，首次 SELECT 返回 5 位客户",
@@ -189,7 +189,8 @@
         "练习知识点与难度筛选不更改题号、草稿或通过记录",
         "新增建表题实际批改并保存第45题草稿与进度",
         "纯常量题明确没有源表，空字符串与NULL预览分别显示",
-        "手机键盘高度与平移变化保持可执行，收起后恢复导航状态"
+        "手机键盘高度与平移变化保持可执行，收起后恢复导航状态",
+        "手机参考面板可切换结果并保存高度，所有题目都有详细讲解"
       ]
     },
     {
@@ -266,20 +267,8 @@
   "largeDataset": "SQL 核心检查包含 5000 行查询与聚合；本轮未调整容量限制。",
   "engine": "MySQL AST + structured execution + decimal.js",
   "limitations": [
-    "未完成真实 MySQL 8.4 差分",
-    "未完成真实 iPhone Safari 中文输入法、横竖屏与系统工具栏验收",
-    "Windows 验证来自托管 CI；普通用户机器的 UAC、断电、权限等仍待实机验证"
-  ],
-  "windowsValidation": {
-    "installedChecks": 12,
-    "installedFailures": 0,
-    "upgradeFrom": "0.3.3",
-    "upgradeTo": "0.4.0",
-    "upgradeChecks": 8,
-    "upgradeFailures": 0,
-    "mockedFeed": false,
-    "mockedVersion": false,
-    "installerRun": "https://github.com/MarikoAkina/sql-lab/actions/runs/40264868642",
-    "upgradeRun": "https://github.com/MarikoAkina/sql-lab/actions/runs/40265313715"
-  }
+    "真实 iPhone Safari 系统选区和中文输入法尚待实机回归",
+    "1.0.0 Windows 安装检查以本版本 Release 报告为准；历史升级报告不等于本版本升级验收",
+    "真实 MySQL 8.4 差分仍未完成"
+  ]
 }

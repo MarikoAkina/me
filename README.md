@@ -4,7 +4,7 @@
 
 # SQL LAB
 
-> **0.4.0**：45 道练习，每题附示例数据与预期结果；改进手机键盘布局。原有 27 题和学习进度保留。[练习更新](docs/learning-0.4.md) · [更新与部署](docs/updates.md)。
+> **1.0.0**：手机题目、结果与 SQL 编辑器上下同屏；面板高度可调，键盘弹出后保留目标，45 题补充详细讲解。[练习更新](docs/learning-0.4.md) · [更新与部署](docs/updates.md)。
 
 **面向零基础与财务管理学习者的中文 MySQL 基础练习工作台。**
 
@@ -37,7 +37,7 @@
 | Windows 安装版 | [下载最新发布版本](https://github.com/MarikoAkina/sql-lab/releases/latest) | Windows 10 / 11 x64；安装后可离线练习，无需 Node.js、MySQL 或账号 |
 | 手机与电脑网页 | [打开公开体验网页](https://akinaly.top/sql-lab/) | 无需注册应用账号；练习记录保存在当前浏览器，也可自行部署 |
 
-当前源码版本为 **0.4.0**，Windows 安装包由发布流程验证后提供。下载 `SQL-Lab-Setup-0.4.0.exe`，按向导安装并打开 SQL LAB。安装包暂未使用发布者证书，Windows 可能显示“未知发布者”；[发布页](https://github.com/MarikoAkina/sql-lab/releases/tag/v0.4.0)提供 SHA256 校验文件与安装检查报告。
+当前源码版本为 **1.0.0**，Windows 安装包由发布流程验证后提供。下载 `SQL-Lab-Setup-1.0.0.exe`，按向导安装并打开 SQL LAB。安装包暂未使用发布者证书，Windows 可能显示“未知发布者”；[发布页](https://github.com/MarikoAkina/sql-lab/releases/tag/v1.0.0)提供 SHA256 校验文件与安装检查报告。
 
 网页已开放为公开试用。数据仍分别保存在各自浏览器，不会自动跨设备同步。自行部署和本地运行见 [开发指南](docs/development.md)。
 
@@ -136,7 +136,10 @@ SQL 使用 **node-sql-parser 的 MySQL AST 与自有结构化执行器**，金�
 
 ## 验证状态
 
-**0.4.0 源码验收：190 项自动化检查通过，0 项失败。** Windows 安装检查由发布工作流单独执行，结果见发布报告。
+1.0.0 手机上下同屏、面板调节与详细讲解见 [新版使用说明](docs/learning-1.0.md)。原 45 题答案、ID 与判题规则保留。
+
+
+**1.0.0 源码验收：191 项自动化检查通过，0 项失败。** Windows 安装检查由发布工作流单独执行，结果见发布报告。
 
 本版另完成真实 Windows **0.3.3 → 0.4.0** 自动升级验收，**8 项全部通过**。确认下载、安装、自动重启及客户数据、脚本、练习进度恢复；新版 45 题及独立示例/预期输出正常。[0.4.0 升级报告](public/windows-upgrade-acceptance-0.4.json) · [工作流](https://github.com/MarikoAkina/sql-lab/actions/runs/40265313715)。
 
