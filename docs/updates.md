@@ -22,6 +22,54 @@
 
 版本按三个非负整数比较，例如 `0.3.10` 高于 `0.3.9`；当前网页更新协议只处理正式 `x.y.z` 版本。检查失败不清空缓存或浏览器数据库。网页没有 Service Worker 离线缓存。
 
+## 让试用站以后自动部署新版（推荐）
+
+网页不能直接改写 AWS 上的文件。现在补充服务器自动更新器：一次安装后，每约 10 分钟从固定仓库检查最新正式 Release，下载网页 ZIP、校验大小与 SHA256、验证资源与子路径、备份旧站点，再发布新入口。重复检查不下载相同版本，不自动降级；下载/校验失败保留旧站，部署异常时尝试恢复旧入口并保留快照。
+
+**网页按钮不会立即触发服务器更新。** 自动部署由服务器定时器执行；服务器完成后，旧网页点击“检查更新”会保存当前浏览器数据并加载新页面。Windows 应用的自动安装仍使用独立的 electron-updater 流程。
+
+先导出浏览器完整 JSON 备份，再在 AWS Ubuntu SSH 终端整段执行一次：
+
+```bash
+bash <<'SH'
+set -euo pipefail
+sudo apt-get install -y python3 ca-certificates curl
+sql_lab_updater_dir=$(mktemp -d)
+cd "$sql_lab_updater_dir"
+sql_lab_updater_source='https://raw.githubusercontent.com/MarikoAkina/sql-lab/main/scripts'
+curl -fL --retry 3 "$sql_lab_updater_source/update-web.py" -o update-web.py
+curl -fL --retry 3 "$sql_lab_updater_source/install-web-updater.sh" -o install-web-updater.sh
+sudo bash install-web-updater.sh
+sudo journalctl -u sql-lab-web-update.service -n 20 --no-pager
+SH
+```
+
+沿用 `/var/www/akinaly/sql-lab`，要求已完成首次部署。安装器会备份已有同名更新器配置，设置每约 10 分钟检查，并立即执行一次检查。它不修改 Nginx、证书或 80/443。使用公开 GitHub HTTPS 下载，无需账号、SSH 私钥或 AI API。
+
+手动立即更新与查看状态：
+
+```bash
+sudo systemctl start sql-lab-web-update.service
+sudo journalctl -u sql-lab-web-update.service -n 30 --no-pager
+sudo systemctl list-timers sql-lab-web-update.timer --no-pager
+curl -fsS https://akinaly.top/sql-lab/version.json
+```
+
+日志 `status: updated` 表示已更新，并给出旧站快照路径；`status: current` 表示没有更高版本；网络、校验或磁盘错误会使任务失败，旧站保留，定时器下次继续尝试。系统权限与磁盘故障可能导致自动回退本身失败，日志会明确给出人工恢复路径，不应把它解释为已恢复。
+
+自动更新器只写入站点、快照和锁文件目录，保留旧哈希资源以供已打开的页面使用。备份默认在 `/var/backups/sql-lab/before-auto-update-*/site`，不会自动删除。应定期查看磁盘空间并自行保留所需备份。它不更新更新器脚本自身。
+
+暂停自动更新或回滚前先停止定时器和正在执行的服务，否则稍后会再次更新：
+
+```bash
+sudo systemctl disable --now sql-lab-web-update.timer
+sudo systemctl stop sql-lab-web-update.service
+```
+
+随后用日志输出的实际 `site` 快照路径恢复网页；旧版浏览器进度兼容限制仍见下方恢复说明。备份、主程序与历史 Release 均保留。
+
+验证：13 项 Python 专项测试通过，涵盖相同版本/降级、校验失败、无效 ZIP/路径/符号链接、丢失资源、网络失败、失败回退和并发锁；systemd 单元通过 `systemd-analyze verify`。另使用真实 GitHub HTTPS 下载和公开 0.4.0 网页包，在隔离目录实际完成 0.3.3 → 0.4.0 部署并核对备份。**尚未在你的 AWS 上安装或启动定时器**；安装成功与否应以服务器终端输出为准。
+
 ## 在 akinaly.top 更新到 0.4.0
 
 先在现有网页“数据与备份”中导出 JSON。下面命令在 AWS 的 Ubuntu SSH 终端执行。它们下载预构建网页，不需要在小内存服务器上安装 Node.js 或编译。

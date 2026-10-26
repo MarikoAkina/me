@@ -94,3 +94,7 @@ SQL 验收检查当前结构化执行器的实际结果和状态，另按 MySQL 
 Chromium 实际检查五种宽度、题目与结果宽表滚动、300px 可视高度和 36px 上移时的输入/执行/复制/再次编辑。它使用开发专用键盘模拟，不是真实 iPhone 输入法。完整记录见 [0.4.0 更新](learning-0.4.md)。
 
 0.4.0 发布后实际安装公开 0.3.3，使用真实应用按钮和 GitHub 源自动升级到 0.4.0，**8 项通过**。恢复客户记录、已保存脚本、练习草稿和通过记录，并确认 45 题的独立示例表与预期输出不含工作台新增客户。本版本安装后检查也为 12 项通过。[原始报告](../public/windows-upgrade-acceptance-0.4.json) · [升级工作流](https://github.com/MarikoAkina/sql-lab/actions/runs/40265313715) · [安装工作流](https://github.com/MarikoAkina/sql-lab/actions/runs/40264868642)。
+
+## 服务器自动部署工具
+
+新增 `python3 -m unittest discover -s tests -p 'test_web_updater.py' -v`，13 项通过。与 `npm test` 的 190 项应用检查分别计数。使用真实 GitHub HTTPS、最新 Release 元数据与网页 ZIP，在隔离目录实际从 0.3.3 部署到 0.4.0，并核对旧入口备份。两个 systemd 单元通过配置校验；尚未在 AWS 安装或验证系统定时器实际触发，操作与边界见 [更新指南](updates.md)。
