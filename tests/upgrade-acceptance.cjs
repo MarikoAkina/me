@@ -8,7 +8,7 @@ if (process.platform !== 'win32' || process.env.GITHUB_ACTIONS !== 'true') throw
 const exe = process.env.SQL_LAB_UPGRADE_EXE;
 if (!exe || !path.isAbsolute(exe) || !exe.includes('sql-lab-upgrade-test')) throw new Error('Isolated fixture executable required.');
 const target = require('../package.json').version;
-const report = {from: '0.3.2', to: target, platform: process.platform, mockedVersion: false, mockedFeed: false, startedAt: new Date().toISOString(), checks: []};
+const report = {from: '0.3.3', to: target, platform: process.platform, mockedVersion: false, mockedFeed: false, startedAt: new Date().toISOString(), checks: []};
 const output = path.resolve('upgrade-results');
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 const compact = value => String(value).replace(/\s/g, '');
@@ -75,12 +75,12 @@ async function main() {
   await fs.mkdir(output, {recursive: true});
   let client;
   try {
-    await check('published old installer has real version 0.3.2', async () => assert.equal(installedVersion(), '0.3.2'));
+    await check('published old installer has real version 0.3.3', async () => assert.equal(installedVersion(), '0.3.3'));
     const child = spawn(exe, ['--remote-debugging-port=9222', '--remote-debugging-address=127.0.0.1'], {stdio: 'ignore'});
     client = await connect(9222);
     await check('published old app loads its real updater and SQL Worker', async () => {
       await until(() => client.js("document.querySelectorAll('.result-grid tbody tr').length===5"), 'initial rows');
-      assert.equal((await client.js('window.sqlLabUpdates.getState()')).currentVersion, '0.3.2');
+      assert.equal((await client.js('window.sqlLabUpdates.getState()')).currentVersion, '0.3.3');
     });
     await check('workspace write, SQL draft and exercise progress are saved before upgrading', async () => {
       await edit(client, "INSERT INTO customers(name,city) VALUES('升级回归客户','武汉'); SELECT COUNT(*) FROM customers;");
@@ -110,7 +110,7 @@ async function main() {
     stopFixture(); await wait(1500);
     spawn(exe, ['--remote-debugging-port=9223', '--remote-debugging-address=127.0.0.1'], {stdio: 'ignore'});
     client = await connect(9223);
-    await check('new version restores the written customer and unsaved-timer SQL draft', async () => {
+    await check('new version restores the written customer and saved SQL draft', async () => {
       await until(() => client.js("document.querySelectorAll('.result-grid tbody tr').length===6"), 'restored customer rows');
       assert.equal((await client.js('window.sqlLabUpdates.getState()')).currentVersion, target);
       assert.ok((await client.js("document.querySelector('.result-grid').textContent")).includes('升级回归客户'));
@@ -119,6 +119,10 @@ async function main() {
     await check('new version restores exercise draft and passing progress', async () => {
       await click(client, '学习练习'); await until(() => client.js("!!document.querySelector('[data-lesson-id=\"1\"] .complete')"), 'restored progress');
       assert.equal(compact(await client.js("document.querySelector('.cm-content').textContent")), compact('SELECT * FROM customers;'));
+    });
+    await check('upgraded version has 45 exercises and isolated reference tables with expected output', async () => {
+      await until(() => client.js("document.querySelectorAll('[data-lesson-id]').length===45&&document.querySelectorAll('.lesson-source .lesson-data-grid tbody tr').length===5&&document.querySelectorAll('.lesson-expected .lesson-data-grid tbody tr').length===5"), 'new exercise references');
+      assert.ok(!(await client.js("document.querySelector('.lesson-source').textContent")).includes('升级回归客户'));
     });
     const image = await client.send('Page.captureScreenshot', {format: 'png'});
     await fs.writeFile(path.join(output, 'upgraded-workspace.png'), Buffer.from(image.data, 'base64'));

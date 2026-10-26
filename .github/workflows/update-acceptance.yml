@@ -20,17 +20,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Install published 0.3.2 fixture
+      - name: Install published 0.3.3 fixture
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           $assets = Join-Path $env:RUNNER_TEMP 'upgrade-assets'
           New-Item -ItemType Directory -Force $assets | Out-Null
-          gh release download v0.3.2 --repo $env:GITHUB_REPOSITORY --pattern SQL-Lab-Setup-0.3.2.exe --pattern SHA256SUMS.txt --dir $assets
+          gh release download v0.3.3 --repo $env:GITHUB_REPOSITORY --pattern SQL-Lab-Setup-0.3.3.exe --pattern SHA256SUMS.txt --dir $assets
           if ($LASTEXITCODE -ne 0) { throw 'Fixture download failed' }
-          $installer = Join-Path $assets 'SQL-Lab-Setup-0.3.2.exe'
-          $expected = (Get-Content (Join-Path $assets 'SHA256SUMS.txt') | Where-Object { $_ -match 'SQL-Lab-Setup-0.3.2.exe$' }).Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)[0]
+          $installer = Join-Path $assets 'SQL-Lab-Setup-0.3.3.exe'
+          $expected = (Get-Content (Join-Path $assets 'SHA256SUMS.txt') | Where-Object { $_ -match 'SQL-Lab-Setup-0.3.3.exe$' }).Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)[0]
           if ((Get-FileHash $installer -Algorithm SHA256).Hash.ToLower() -ne $expected) { throw 'Fixture checksum mismatch' }
           $installPath = Join-Path $env:RUNNER_TEMP 'sql-lab-upgrade-test'
           $setup = Start-Process $installer -ArgumentList @('/S', "/D=$installPath") -Wait -PassThru
