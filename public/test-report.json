@@ -1,9 +1,10 @@
 {
   "product": "SQL LAB · MySQL 基础学习模拟器",
-  "testedAt": "2026-10-26T09:43:23.484008+08:00",
+  "version": "0.4.0",
+  "testedAt": "2026-10-26T03:31:11.526898+00:00",
   "summary": {
-    "tests": 172,
-    "pass": 172,
+    "tests": 190,
+    "pass": 190,
     "fail": 0
   },
   "suites": [
@@ -141,8 +142,8 @@
     },
     {
       "suite": "IndexedDB 保存与备份",
-      "tests": 8,
-      "pass": 8,
+      "tests": 9,
+      "pass": 9,
       "fail": 0,
       "cases": [
         "IndexedDB 自动保存、刷新等价重新读取与草稿进度恢复",
@@ -152,13 +153,14 @@
         "恢复示例只替换两个示例库并保留自建库",
         "旧版 1–15 题的数据库、草稿和进度无需迁移即可恢复",
         "新增第 27 题的草稿与进度可保存、刷新并完整备份恢复",
+        "第45题的草稿进度与旧27题可共同保存并恢复备份",
         "未知编号和异常草稿仍拒绝恢复"
       ]
     },
     {
       "suite": "DOM 页面集成",
-      "tests": 22,
-      "pass": 22,
+      "tests": 27,
+      "pass": 27,
       "fail": 0,
       "cases": [
         "工作台实际挂载，首次 SELECT 返回 5 位客户",
@@ -169,7 +171,7 @@
         "SQL 标签新建和草稿保存",
         "学习练习实际批改，独立数据与进度保存",
         "练习提示、参考答案默认折叠与重新开始",
-        "统一列表保留 27 个唯一题号，跨月练习可执行并批改",
+        "统一列表保留 45 个唯一题号，跨月练习可执行并批改",
         "关联练习同时显示客户和订单表结构，并按原样恢复新题草稿",
         "新增 SQL 输入辅助可插入并撤销 CASE",
         "375/390/430/768/1280px 的区域导航状态与输入属性",
@@ -182,7 +184,32 @@
         "网页检查按钮保存尚未延时落盘的草稿并显示最新状态",
         "GitHub 新版但站点未部署时明确提示管理员部署",
         "更新网络失败后保留草稿并可再次检查",
-        "桌面保存最新草稿后才调用安装，安装异步失败后可再次重试"
+        "桌面保存最新草稿后才调用安装，安装异步失败后可再次重试",
+        "每题展示初始示例与预期查询结果，工作台修改不污染练习",
+        "练习知识点与难度筛选不更改题号、草稿或通过记录",
+        "新增建表题实际批改并保存第45题草稿与进度",
+        "纯常量题明确没有源表，空字符串与NULL预览分别显示",
+        "手机键盘高度与平移变化保持可执行，收起后恢复导航状态"
+      ]
+    },
+    {
+      "suite": "练习预览与移动视口",
+      "tests": 12,
+      "pass": 12,
+      "fail": 0,
+      "cases": [
+        "all original 27 definitions, answers and rules remain byte-equivalent after normalization",
+        "45 unique stable IDs have hints, learning explanations and successful reference execution",
+        "every reference lists the exact fixture rows and expected writes without altering the workbench",
+        "LEFT JOIN and subquery previews use both source tables and retain unmatched NULLs",
+        "independent golden output verifies new filters, pagination, exact tax and joined finance totals",
+        "NULL, empty text and zero stay distinct in source and expected output",
+        "write previews show defaults, new columns, changed schema and newly created tables",
+        "equivalent SQL is accepted while wrong order, duplicate counts and lost unmatched clients fail",
+        "keyboard pan follows visual height and top; blur clears stale iOS offset",
+        "Android resizing both viewports still detects keyboard from focus baseline",
+        "browser chrome, desktop resizing and pinch zoom do not trigger compact keyboard mode",
+        "resize/scroll listeners track a panning keyboard and detach on cleanup"
       ]
     },
     {
@@ -235,38 +262,12 @@
     768,
     1280
   ],
-  "responsiveVerification": "真实 Chromium 开发 iframe 视口 375/390/430/768/1280px 实际渲染、截图及页面宽度检查；同时有 DOM 状态测试。详见 /ui-review-checks.json。",
-  "largeDataset": "5,000 行精确金额数据：查询和 SUM/COUNT 聚合通过。",
-  "engine": "MySQL AST structured evaluator + decimal.js; writes atomic per statement; worker sequential execution; whole-file import rollback.",
-  "notVerified": [
-    "真实 MySQL 8.4 服务器逐条对照",
-    "真实 iPhone Safari、触控、虚拟键盘、安全区和横竖屏",
-    "当前 HTTP 预览的系统剪贴板自动复制权限：只验证降级窗口",
-    "本轮没有生成或重新安装 Windows EXE；旧版安装验收不能视为新版验收"
-  ],
-  "scope": "站点中“支持的语法与说明”列出完整语法范围、容量与兼容差异。",
-  "mobileFeedback": "手机结果页直接显示批改反馈、继续编辑、提示和下一题，DOM 操作测试通过。",
-  "distribution": "独立 React/Vite 客户端项目：锁定依赖安装、SQL 与 DOM 验收。",
-  "desktopVerification": "安装包通过 Windows 发布流程构建、实际安装与 10 项检查后发布；具体结果见同版本 release 的 desktop-smoke.json。",
-  "version": "0.3.3",
-  "lessonCount": 27,
-  "addedLessons": [
-    16,
-    17,
-    18,
-    19,
-    20,
-    21,
-    22,
-    23,
-    24,
-    25,
-    26,
-    27
-  ],
-  "expansionVerification": "35 项独立扩展用例；全部 27 道参考答案执行通过；12 道新增题按实际结果批改；旧题草稿与新题备份恢复通过。",
+  "responsiveVerification": "真实 Chromium 页面及开发 iframe 实际渲染和截图检查，页面宽度未溢出；300px/36px 键盘状态为开发模拟，不是 iPhone Safari 实机。",
+  "largeDataset": "SQL 核心检查包含 5000 行查询与聚合；本轮未调整容量限制。",
+  "engine": "MySQL AST + structured execution + decimal.js",
   "limitations": [
-    "Windows CI 的本地更新源下载以模拟旧客户端版本执行，不代表不同公开版本间完整安装重启验收。",
-    "真实 MySQL 8.4 对照与 iPhone Safari 完整实机验证仍待完成。"
+    "未完成真实 MySQL 8.4 差分",
+    "未完成真实 iPhone Safari 中文输入法、横竖屏与系统工具栏验收",
+    "Windows 本版本安装检查以 Release 报告为准；旧的 0.3.2→0.3.3 报告保留原样"
   ]
 }

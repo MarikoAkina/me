@@ -9,6 +9,7 @@
 | 第一次使用，在手机上写 SQL | [新手与手机指南](getting-started.md) |
 | 刷新后继续练习，或换设备迁移数据 | [数据、备份与恢复](data-and-backup.md) |
 | 学习新函数与第 16–27 题 | [条件、文本与日期指南](expansion-1.md) |
+| 每题的示例、预期输出与 28–45 题内容 | [练习与手机改进](learning-0.4.md) |
 | 确认某条 SQL 能否执行 | [SQL 支持范围与兼容限制](sql-compatibility.md) |
 | 下载源码、部署网页或构建安装包 | [开发、构建与部署](development.md) |
 | 了解测试证据和未完成的验收 | [测试与验收](testing.md) |
@@ -16,11 +17,11 @@
 
 ## 文档目录
 
-1. [新手与手机指南](getting-started.md)：安装与访问、第一条 SELECT、工作台、结果表与 27 道练习。
+1. [新手与手机指南](getting-started.md)：安装与访问、第一条 SELECT、工作台、结果表与 45 道练习。
 2. [数据、备份与恢复](data-and-backup.md)：IndexedDB、完整 JSON、SQL 文件、示例恢复与清空。
 3. [SQL 支持范围与兼容限制](sql-compatibility.md)：语法、类型、约束、错误处理、MySQL 差异与容量。
 4. [开发、构建与部署](development.md)：环境要求、常用命令、代码入口、静态部署与 Windows 发布。
-5. [测试与验收](testing.md)：149 项自动化检查、Windows 安装后检查与实机验收边界。
+5. [测试与验收](testing.md)：190 项自动化检查、Windows 安装后检查与实机验收边界。
 
 6. [条件、文本与日期指南](expansion-1.md)：条件分类、空值、文本、日期与财务分析的新增练习。
 

@@ -4,7 +4,7 @@
 
 # SQL LAB
 
-> **0.3.3**：新增检查更新、Windows 自动下载安装和网页版本检查。保留 27 道练习及原数据格式。[更新与服务器部署](docs/updates.md)。
+> **0.4.0**：45 道练习，每题附示例数据与预期结果；改进手机键盘布局。原有 27 题和学习进度保留。[练习更新](docs/learning-0.4.md) · [更新与部署](docs/updates.md)。
 
 **面向零基础与财务管理学习者的中文 MySQL 基础练习工作台。**
 
@@ -37,11 +37,11 @@
 | Windows 安装版 | [下载最新发布版本](https://github.com/MarikoAkina/sql-lab/releases/latest) | Windows 10 / 11 x64；安装后可离线练习，无需 Node.js、MySQL 或账号 |
 | 手机与电脑网页 | [打开公开体验网页](https://akinaly.top/sql-lab/) | 无需注册应用账号；练习记录保存在当前浏览器，也可自行部署 |
 
-当前源码版本为 **0.3.3**，Windows 安装包由发布流程验证后提供。下载 `SQL-Lab-Setup-0.3.3.exe`，按向导安装并打开 SQL LAB。安装包暂未使用发布者证书，Windows 可能显示“未知发布者”；[发布页](https://github.com/MarikoAkina/sql-lab/releases/tag/v0.3.3)提供 SHA256 校验文件与安装检查报告。
+当前源码版本为 **0.4.0**，Windows 安装包由发布流程验证后提供。下载 `SQL-Lab-Setup-0.4.0.exe`，按向导安装并打开 SQL LAB。安装包暂未使用发布者证书，Windows 可能显示“未知发布者”；[发布页](https://github.com/MarikoAkina/sql-lab/releases/tag/v0.4.0)提供 SHA256 校验文件与安装检查报告。
 
 网页已开放为公开试用。数据仍分别保存在各自浏览器，不会自动跨设备同步。自行部署和本地运行见 [开发指南](docs/development.md)。
 
-0.3.1 及以前需先手动安装一次 0.3.3；以后可用顶部或帮助菜单“检查更新”。AWS 试用站的部署命令见 [更新与部署指南](docs/updates.md)。
+0.3.1 及以前需先手动安装一次 0.4.0；以后可用顶部或帮助菜单“检查更新”。AWS 试用站的部署命令见 [更新与部署指南](docs/updates.md)。
 
 ## 界面预览
 
@@ -67,7 +67,7 @@ WHERE city = '武汉';
 
 初始数据会返回 3 行。`SELECT` 选择要看的列，`FROM` 指定表，`WHERE` 筛选记录。查询不会修改数据；以上行数以尚未修改的示例库为准。
 
-切换到 **学习练习**，从第 1 题开始。每题都有目标、表结构、分步提示和折叠的参考答案，点击 **执行并批改** 检查结果。[继续阅读新手指南 →](docs/getting-started.md)
+切换到 **学习练习**，从第 1 题开始。手机可在底部“题目”查看示例与预期结果，再点“编写 SQL”。每题都有目标、示例表数据、表结构、预期结果、分步提示和折叠的参考答案，点击 **执行并批改** 检查结果。[继续阅读新手指南 →](docs/getting-started.md)
 
 ## 功能概览
 
@@ -79,7 +79,7 @@ WHERE city = '武汉';
 | 基础 SQL | 建库建表、修改表、增删改、筛选与分页、聚合分组、两表连接和基础非关联子查询 |
 | 函数与表达式 | CASE、条件与空值函数、中文文本处理、日期分析与金额取整；[扩展指南](docs/expansion-1.md) |
 | 财务示例 | 客户、订单、费用与预算练习；金额使用十进制计算，保留 NULL、重复值和未匹配记录 |
-| 学习与批改 | 27 道渐进练习；查询比较实际结果，写入练习检查独立数据副本的最终状态 |
+| 学习与批改 | 45 道渐进练习；查询比较实际结果，写入练习检查独立数据副本的最终状态 |
 | 保存与迁移 | IndexedDB 自动保存、完整 JSON 备份与恢复、SQL 脚本导入导出、结果复制与 CSV 导出 |
 | Windows 离线版 | 与网页共用前端和 SQL 引擎，提供安装程序、原生菜单、本地保存与手动触发的自动更新 |
 
@@ -98,8 +98,11 @@ SQL 使用 **node-sql-parser 的 MySQL AST 与自有结构化执行器**，金�
 | 条件与文本 | 16–21 | CASE、IF、COALESCE、NULLIF、中文截取与文本清理 |
 | 日期分析 | 22–24 | 年月季度、按月费用汇总、日期差 |
 | 财务综合 | 25–27 | 条件聚合、向上安排预算与费用分析表 |
+| 条件与分页巩固 | 28–33 | IN、LIKE、括号、分页、含税金额与筛选后分组 |
+| 客户收款分析 | 34–39 | 连接匹配、ON 与 WHERE、子查询、客户收款、NULL 与空文本 |
+| 数据维护与设计 | 40–45 | 多行插入、条件更新删除、ALTER、建表与收款计划 |
 
-练习统一列出 01–27 题，按查询、统计、表设计、条件、文本、日期和财务分析的顺序学习。原有题号、通过记录与备份保持兼容；第 23、27 题只在独立题目副本增加跨月费用，不修改工作台。
+练习统一列出 01–45 题，按查询、统计、表设计、条件、文本、日期和财务分析的顺序学习。原有题号、通过记录与备份保持兼容；第 23、27 题只在独立题目副本增加跨月费用，不修改工作台。
 
 示例库包含 `finance_lab`（客户、订单、费用）和 `campus_lab`（学生成绩）。工作台修改会自动保存；学习练习使用独立数据，支持重新开始。
 
@@ -133,13 +136,13 @@ SQL 使用 **node-sql-parser 的 MySQL AST 与自有结构化执行器**，金�
 
 ## 验证状态
 
-**0.3.3 源码验收：172 项自动化检查通过，0 项失败。** Windows 安装检查由发布工作流单独执行，结果见发布报告。
+**0.4.0 源码验收：190 项自动化检查通过，0 项失败。** Windows 安装检查由发布工作流单独执行，结果见发布报告。
 
 已补齐公开版本 **0.3.2 → 0.3.3** 的 Windows CI 自动升级验收，**7 项通过**：使用真实安装包和 GitHub 更新源，点击应用内按钮，确认自动下载安装与重新启动，并恢复客户数据、SQL 草稿和练习进度。[升级报告](public/windows-upgrade-acceptance.json) · [工作流记录](https://github.com/MarikoAkina/sql-lab/actions/runs/40260121753)。
 
-查看 [仓库测试报告](public/test-report.json)、[Windows 发布报告](https://github.com/MarikoAkina/sql-lab/releases/download/v0.3.3/desktop-smoke.json)和 [GitHub Actions](https://github.com/MarikoAkina/sql-lab/actions)。测试组成、检查命令和报告边界见 [测试与验收](docs/testing.md)。
+查看 [仓库测试报告](public/test-report.json)、[Windows 发布报告](https://github.com/MarikoAkina/sql-lab/releases/download/v0.4.0/desktop-smoke.json)和 [GitHub Actions](https://github.com/MarikoAkina/sql-lab/actions)。测试组成、检查命令和报告边界见 [测试与验收](docs/testing.md)。
 
-尚未完成真实 MySQL 8.4 服务器逐条对照，以及真实 iPhone Safari、虚拟键盘与触控流程验收。DOM 测试中的屏幕宽度检查不等同于实机布局验证。
+尚未完成真实 MySQL 8.4 服务器逐条对照，以及真实 iPhone Safari、虚拟键盘与触控流程验收。本轮 Chromium 五种宽度及 300px 可视高度的键盘模拟检查见 [练习更新记录](docs/learning-0.4.md)；模拟检查不等同于 Safari 实机验证。
 
 ## 参与项目
 

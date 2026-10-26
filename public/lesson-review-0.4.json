@@ -1,0 +1,53 @@
+{
+  "version": "0.4.0",
+  "date": "2026-10-26",
+  "browser": "Chromium",
+  "method": "开发 iframe 宽度切换与模拟 visualViewport；非实机输入法",
+  "widths": [
+    {
+      "width": 375,
+      "appWidth": 375,
+      "appScrollWidth": 375
+    },
+    {
+      "width": 390,
+      "appWidth": 390,
+      "appScrollWidth": 390
+    },
+    {
+      "width": 430,
+      "appWidth": 430,
+      "appScrollWidth": 430
+    },
+    {
+      "width": 768,
+      "appWidth": 768,
+      "appScrollWidth": 768
+    },
+    {
+      "width": 1280,
+      "appWidth": 1280,
+      "appScrollWidth": 1280
+    }
+  ],
+  "keyboardSimulation": {
+    "height": 300,
+    "offsetTop": 36,
+    "editorHeight": 187,
+    "executeVisible": true,
+    "hideKeyboardVisible": true
+  },
+  "flowsVerified": [
+    "选择学习练习并显示示例与预期输出",
+    "编写 SELECT * FROM customers",
+    "模拟键盘下执行并批改通过",
+    "恢复视口后复制晨光商贸单元格并出现已复制提示",
+    "继续编辑保留 SQL",
+    "平板和桌面分栏显示及结果自身横向滚动"
+  ],
+  "notVerified": [
+    "真实 iPhone Safari 软键盘",
+    "真实中文组合输入",
+    "实机横竖屏"
+  ]
+}

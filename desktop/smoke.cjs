@@ -48,8 +48,10 @@ async function runSmoke(win, reportFile) {
     });
     await check('new monthly lesson grades and restores progress without changing workbench',async()=>{
       await click('学习练习');
-      await until("document.querySelectorAll('[data-lesson-id]').length===27");
-      const count=await js("document.querySelectorAll('[data-lesson-id]').length");if(count!==27)throw new Error('Expanded lesson count mismatch');
+      await until("document.querySelectorAll('[data-lesson-id]').length===45");
+      const count=await js("document.querySelectorAll('[data-lesson-id]').length");if(count!==45)throw new Error('Expanded lesson count mismatch');
+      await until("document.querySelectorAll('.lesson-source .lesson-data-grid tbody tr').length===5&&document.querySelectorAll('.lesson-expected .lesson-data-grid tbody tr').length===5");
+      const lessonImage=await win.webContents.capturePage();await fs.writeFile(path.join(path.dirname(reportFile),'lesson-reference.png'),lessonImage.toPNG());
       await js("document.querySelector('[data-lesson-id=\"23\"]').click()");
       await until("document.querySelector('[data-lesson-id=\"23\"]').classList.contains('current-lesson')");
       const answer="SELECT DATE_FORMAT(expense_date,'%Y-%m') AS month,SUM(amount) AS total FROM expenses GROUP BY month ORDER BY month;";
@@ -60,7 +62,7 @@ async function runSmoke(win, reportFile) {
       await until(`document.querySelector('.cm-content').textContent.replace(/\\s/g,'')===${JSON.stringify(answer.replace(/\s/g,''))}`);
       await click('工作台');await edit('SELECT COUNT(*) FROM customers;');await click('执行 SQL');await until("document.querySelector('.cell-button')?.textContent==='6'");
     });
-    await check('download dialog links to installer',async()=>{await js("document.querySelector('[aria-label=\"下载 Windows 安装版\"]').click()");await until("document.querySelector('.windows-install-link')?.href.endsWith('/SQL-Lab-Setup-0.3.3.exe')");});
+    await check('download dialog links to installer',async()=>{await js("document.querySelector('[aria-label=\"下载 Windows 安装版\"]').click()");await until("document.querySelector('.windows-install-link')?.href.endsWith('/SQL-Lab-Setup-0.4.0.exe')");});
     await check('installed updater bridge and check button',async()=>{const state=await js("window.sqlLabUpdates.getState()");if(state.currentVersion!==app.getVersion())throw new Error('Bridge version mismatch');await until("!!document.querySelector('[aria-label=\"检查更新\"]')");});
     const installer=process.argv.find(a=>a.startsWith('--smoke-installer='))?.slice('--smoke-installer='.length);
     if(installer)await check('real NSIS update download and SHA512 verification',async()=>{report.updateDownload=await require('./update-download-smoke.cjs').verifyDownload(installer);});

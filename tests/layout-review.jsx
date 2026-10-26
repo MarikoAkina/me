@@ -2,7 +2,7 @@ import React,{useState,useEffect,useRef,useCallback} from 'react';
 
 // Development-only viewport fixture. Production builds render the application directly.
 export default function LayoutReview(){
-  const [width,setWidth]=useState(1280),[metrics,setMetrics]=useState(null),frame=useRef(null);
+  const [width,setWidth]=useState(1280),[metrics,setMetrics]=useState(null),[keyboard,setKeyboard]=useState(false),frame=useRef(null),original=useRef(null);
   const measure=useCallback(()=>{const f=frame.current,d=f?.contentDocument;if(!d?.querySelector('.app'))return;const editor=d.querySelector('.code-editor'),grid=d.querySelector('.grid-scroll');setMetrics({viewport:f.contentWindow.innerWidth,page:d.documentElement.scrollWidth,editor:Math.round(editor?.getBoundingClientRect().height||0),result:Math.round(grid?.getBoundingClientRect().height||0),gridWidth:grid?.clientWidth||0,gridScrollWidth:grid?.scrollWidth||0});},[]);
   useEffect(()=>{const timer=setInterval(measure,500);measure();return()=>clearInterval(timer);},[width,measure]);
   return <div style={{height:'100dvh',display:'flex',flexDirection:'column',background:'#e5e7eb',color:'#28313d',overflow:'auto'}}>
@@ -10,6 +10,7 @@ export default function LayoutReview(){
       <strong style={{fontSize:13,marginRight:12}}>布局检查</strong>
       {[375,390,430,768,1280].map(w=><button key={w} aria-pressed={width===w} onClick={()=>setWidth(w)} style={{minHeight:36,fontSize:12,padding:'4px 10px',background:width===w?'#edf3fa':'#fff'}}>{w}px</button>)}
       <button onClick={measure} style={{minHeight:36,fontSize:12,padding:'4px 10px'}}>测量布局</button>
+      <button onClick={()=>{const win=frame.current.contentWindow;if(!keyboard){original.current=Object.getOwnPropertyDescriptor(win,'visualViewport');const vv=new win.EventTarget();Object.assign(vv,{height:300,offsetTop:36,scale:1});Object.defineProperty(win,'visualViewport',{value:vv,configurable:true});win.document.querySelector('.cm-content')?.focus();}else{win.document.activeElement?.blur();Object.defineProperty(win,'visualViewport',original.current);}win.dispatchEvent(new win.Event('resize'));setKeyboard(!keyboard);}} style={{minHeight:36,fontSize:12,padding:'4px 10px'}}>{keyboard?'关闭键盘模拟':'模拟键盘 300px'}</button>
       <output data-testid="layout-metrics" style={{fontSize:12,marginLeft:'auto'}}>{metrics?JSON.stringify(metrics):'测量中'}</output>
     </div>
     <div style={{flex:1,minHeight:0,overflow:'auto',display:'flex',alignItems:'flex-start',justifyContent:width<1000?'center':'flex-start'}}>

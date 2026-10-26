@@ -84,6 +84,7 @@ jobs:
             release/SHA256SUMS.txt
             release/desktop-smoke.json
             release/desktop-smoke.png
+            release/lesson-reference.png
             release/metadata-audit.json
             release/latest.yml
             release/SQL-Lab-Web-*.zip
