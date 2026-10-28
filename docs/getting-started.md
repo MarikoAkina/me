@@ -4,7 +4,7 @@
 
 ## 打开工作台
 
-Windows 用户可在 [发布页](https://github.com/MarikoAkina/sql-lab/releases/latest)下载安装程序。当前版本为 1.0.1，适用于 Windows 10 / 11 x64；安装后即可离线使用，无需安装 MySQL、Node.js 或注册账号。
+Windows 用户可在 [发布页](https://github.com/MarikoAkina/sql-lab/releases/latest)下载安装程序。当前版本为 1.0.2，适用于 Windows 10 / 11 x64；安装后即可离线使用，无需安装 MySQL、Node.js 或注册账号。
 
 手机可直接打开 [公开体验网页](https://akinaly.top/sql-lab/)，无需注册应用账号。也可按 [开发与部署指南](development.md)运行自己的网页实例。
 

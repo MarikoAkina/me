@@ -1,6 +1,6 @@
 {
   "name": "sql-lab",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "engines": {
     "node": ">=22.13.0"
@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "start": "vite preview",
     "test": "npm run test:acceptance && npm run test:desktop && npm run test:updates",
-    "test:acceptance": "node tests/engine.test.mjs && node --test tests/expansion.test.mjs && node tests/storage.test.mjs && node tests/ui.test.mjs && npm run test:lessons",
+    "test:acceptance": "node tests/engine.test.mjs && node --test tests/expansion.test.mjs && node tests/storage.test.mjs && node tests/ui.test.mjs && node --test tests/completion.test.mjs && npm run test:lessons",
     "test:lessons": "node --test tests/lessons.test.mjs tests/mobile-viewport.test.mjs",
     "test:engine": "node tests/engine.test.mjs && node --test tests/expansion.test.mjs",
     "test:storage": "node tests/storage.test.mjs",
