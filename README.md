@@ -1,3 +1,5 @@
+> **初代补全复现预览分支**：补全采用 a97018f 的 CodeMirror 原生实现；正式站与正式发布保持 1.0.3。本页以下介绍的是正式版。详情见 [复现说明](docs/original-completion-preview.md)。
+
 <p align="center">
   <img src="public/icon-192.png" width="72" height="72" alt="SQL LAB 图标">
 </p>
