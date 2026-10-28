@@ -26,3 +26,5 @@ test('qualified aliases and database names match without case sensitivity',()=>{
 
 test('names shared by keywords and functions keep both meanings',()=>{const o=options('DA|');assert.ok(o.some(x=>x.label==='DATE'&&x.type==='keyword'));assert.ok(o.some(x=>x.label==='DATE'&&x.type==='function'));});
 test('function acceptance places cursor in parentheses without duplicating existing brackets',()=>{const f=options('ROU|').find(x=>x.label==='ROUND'&&x.type==='function');for(const doc of ['ROU','ROU()']){const view={state:EditorState.create({doc}),dispatch(spec){this.state=this.state.update(spec).state;}};f.apply(view,f,0,3);assert.equal(view.state.doc.toString(),'ROUND()');assert.equal(view.state.selection.main.head,6);}});
+
+test('literal punctuation and keyword text do not change SQL completion scope',()=>{for(const expr of ["'('","')'","';'","'SELECT'","'FROM'","CONCAT('(',name)"]){assert.ok(options('SELECT '+expr+', ci| FROM customers').some(c=>c.label==='city'),expr);assert.ok(!options('SELECT '+expr+', ci| FROM customers').some(c=>c.label==='amount'),expr);}});
