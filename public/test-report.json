@@ -1,10 +1,10 @@
 {
   "product": "SQL LAB · MySQL 基础学习模拟器",
-  "version": "1.0.3",
-  "testedAt": "2026-10-28T08:07:24.787739+08:00",
+  "version": "1.0.4",
+  "testedAt": "2026-10-28T09:01:30.688303+08:00",
   "summary": {
-    "tests": 210,
-    "pass": 210,
+    "tests": 193,
+    "pass": 193,
     "fail": 0
   },
   "suites": [
@@ -191,8 +191,8 @@
         "纯常量题明确没有源表，空字符串与NULL预览分别显示",
         "手机键盘高度与平移变化保持可执行，收起后恢复导航状态",
         "手机参考面板可切换结果并保存高度，所有题目都有详细讲解",
-        "补全按钮、别名字段与 SVG 主键图标、Enter 接受与撤销",
-        "输入时自动补全且不恢复额外选区层"
+        "初代原生补全：表别名字段使用默认图标，没有自定义主键标识",
+        "初代输入自动补全与Enter填入恢复，保留原生文本框选"
       ]
     },
     {
@@ -256,19 +256,6 @@
         "failed data save prevents installing or reloading",
         "update manifest hashes describe the final installer and are re-readable"
       ]
-    },
-    {
-      "suite": "SQL 智能补全",
-      "tests": 17,
-      "pass": 17,
-      "fail": 0,
-      "cases": [
-        "表/库上下文、别名字段、真实类型与主键标识",
-        "多表重复字段、语句与子查询作用域",
-        "字符串/注释抑制、反引号与大小写",
-        "元数据变化、函数与关键词同名、括号与光标",
-        "字符串中的括号、分号和关键字不改变补全作用域"
-      ]
     }
   ],
   "responsiveWidths": [
@@ -278,12 +265,13 @@
     768,
     1280
   ],
-  "responsiveVerification": "真实 Chromium 页面及开发 iframe 实际渲染和截图检查，页面宽度未溢出；300px/36px 键盘状态为开发模拟，不是 iPhone Safari 实机。",
+  "responsiveVerification": "1.0.4 真实 Chromium 开发 iframe 检查 375/390/430/768/1280px，页面宽度与视口一致；390px 实际自动补全、Enter 接受、执行批改通过，300px/36px 键盘模拟已查看截图。不是 iPhone Safari 实机。",
   "largeDataset": "SQL 核心检查包含 5000 行查询与聚合；本轮未调整容量限制。",
   "engine": "MySQL AST + structured execution + decimal.js",
   "limitations": [
     "真实 iPhone Safari 系统选区和中文输入法尚待实机回归",
-    "1.0.3 Windows 安装检查以本版本 Release 报告为准；历史升级报告不等于本版本升级验收",
-    "真实 MySQL 8.4 差分仍未完成"
+    "1.0.4 Windows 安装检查以本版本 Release 报告为准；历史升级报告不等于本版本升级验收",
+    "真实 MySQL 8.4 差分仍未完成",
+    "原生候选字形取决于设备字体；字段图标不代表真实主键，MySQL 词典候选不等于模拟器支持范围"
   ]
 }
