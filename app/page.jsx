@@ -1,4 +1,5 @@
 "use client";
+import {columnTypeLabel} from '@/lib/sql/column-types.mjs';
 import {useState,useEffect,useRef,useMemo,useCallback} from 'react';
 import {Database,Table2,ChevronRight,ChevronDown,BookOpen,History,Download,Upload,Maximize2,Minimize2,Sun,Moon,Undo2,Redo2,Copy,Trash2,Plus,FileCode2,CheckCircle2,AlertCircle,HelpCircle,Play,Code2,SquareTerminal,BookOpenText,RotateCcw,PanelLeft,Check,X,Save,KeyRound,List,Clock,ChevronLeft,MoreHorizontal} from 'lucide-react';
 import {SidebarProvider,Sidebar,SidebarHeader,SidebarContent,SidebarFooter} from '@/components/ui/sidebar';
@@ -27,7 +28,7 @@ const starterSQL="-- 你的第一条查询：查看全部客户\nSELECT * FROM c
 const freshWorkspace=()=>({version:1,db:createSeed(),tabs:[{id:'first',name:'查询 1.sql',sql:starterSQL}],activeTab:'first',history:[],progress:{},lessonDrafts:{},theme:'light',lastSaved:null});
 const ident=n=>'`'+n.replace(/`/g,'``')+'`';
 const textCell=v=>v===null?'NULL':v&&typeof v==='object'&&'decimal'in v?v.decimal:String(v);
-const typeLabel=c=>c.type==='VARCHAR'?`VARCHAR(${c.length})`:c.type==='DECIMAL'?`DECIMAL(${c.precision},${c.scale})`:c.type;
+const typeLabel=columnTypeLabel;
 function download(name,content,type='text/plain;charset=utf-8'){const url=URL.createObjectURL(new Blob([content],{type}));const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
 function csv(result){const enc=v=>{if(v===null)return '\\N';return '"'+textCell(v).replace(/"/g,'""')+'"';};return '\uFEFF'+[result.columns.map(enc).join(','),...result.rows.map(r=>r.map(enc).join(','))].join('\r\n');}
 function IconButton({icon:Icon,label,onClick,disabled=false,className=''}){return <button className={'icon-button '+className} aria-label={label} title={label} onClick={onClick} disabled={disabled}><Icon size={18}/></button>;}

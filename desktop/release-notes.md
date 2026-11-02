@@ -1,9 +1,10 @@
-SQL LAB 1.0.4 · 初代 SQL 补全正式回归。
+SQL LAB 1.1.0 · 扩展建表字段类型。
 
-- 同步已验收的独立预览，恢复首版 CodeMirror 原生候选列表、默认图标、排序与触发方式。
-- 输入自动提示，方向键选择、Enter 填入、Escape 收起；Ctrl+Space 主动唤出，手机可点选候选。
-- 根据当前数据库提供表名、字段与基础别名补全，建表或切换数据库后刷新元数据。
-- 移除 1.0.2 引入的自定义候选样式与“补全”按钮。
-- 保留当前行浅蓝背景、原生文本框选、手机键盘适配、同屏练习面板及全部 45 题与进度。
+- 新增 CHAR(n)，保留 VARCHAR(n)，正确区分末尾空格和中文字符长度。
+- 支持 TINYINT、SMALLINT、MEDIUMINT、INT / INTEGER、BIGINT 与 UNSIGNED；整数主键均支持 AUTO_INCREMENT。
+- BIGINT 数据、排序、运算和超过安全整数范围的自增计数保持十进制精确值。
+- 支持 BOOL / BOOLEAN、NUMERIC / DEC / FIXED，以及 TINYTEXT / MEDIUMTEXT / LONGTEXT。
+- 字段树、表结构、DESC、ALTER、SQL 导出和完整 JSON 恢复同步支持新类型；失败写入与结构转换整条回退。
+- 保留初代原生补全、手机同屏练习和全部 45 题。
 
-原生字段钥匙图标表示字段类型，不表示真实主键；数据库树主键标记仍依据真实约束。候选中的 MySQL 关键字不等于模拟器全部支持，执行范围见兼容文档。没有数据库或进度格式迁移。详见 docs/sql-completion.md。真实 iPhone Safari 仍需实机回归；更新前建议导出完整 JSON 备份。旧 Release 与安装包保留。
+使用示例与边界见 docs/column-types.md。FLOAT / DOUBLE / REAL 等近似数类型、二进制、ENUM、JSON、TIME / YEAR / TIMESTAMP 仍未实现。TEXT 现按 65535 个 UTF-8 字节校验；MEDIUMTEXT / LONGTEXT 受模拟器容量限制。旧版常规备份可读取；新类型备份不能导入旧应用，升级前请导出完整 JSON。旧发布与安装包保留。真实 MySQL 8.4 差分与 iPhone Safari 实机仍待验证。

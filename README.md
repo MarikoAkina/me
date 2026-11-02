@@ -4,7 +4,7 @@
 
 # SQL LAB
 
-> **1.0.4**：采用已验收的初代 CodeMirror 原生 SQL 补全：恢复默认候选、图标、排序与输入方式。[补全操作](docs/sql-completion.md)。手机同屏练习与原生框选保留。[练习更新](docs/learning-1.0.md) · [更新与部署](docs/updates.md)。
+> **1.1.0**：扩展 CHAR、整数家族、布尔与文本类型，支持 UNSIGNED 和精确 BIGINT 自增。[字段类型指南](docs/column-types.md)。保留初代 CodeMirror 原生补全。[补全操作](docs/sql-completion.md)。手机同屏练习与原生框选保留。[练习更新](docs/learning-1.0.md) · [更新与部署](docs/updates.md)。
 
 **面向零基础与财务管理学习者的中文 MySQL 基础练习工作台。**
 
@@ -37,11 +37,11 @@
 | Windows 安装版 | [下载最新发布版本](https://github.com/MarikoAkina/sql-lab/releases/latest) | Windows 10 / 11 x64；安装后可离线练习，无需 Node.js、MySQL 或账号 |
 | 手机与电脑网页 | [打开公开体验网页](https://akinaly.top/sql-lab/) | 无需注册应用账号；练习记录保存在当前浏览器，也可自行部署 |
 
-当前源码版本为 **1.0.4**，Windows 安装包由发布流程验证后提供。下载 `SQL-Lab-Setup-1.0.4.exe`，按向导安装并打开 SQL LAB。安装包暂未使用发布者证书，Windows 可能显示“未知发布者”；[发布页](https://github.com/MarikoAkina/sql-lab/releases/tag/v1.0.4)提供 SHA256 校验文件与安装检查报告。
+当前源码版本为 **1.1.0**，Windows 安装包由发布流程验证后提供。下载 `SQL-Lab-Setup-1.1.0.exe`，按向导安装并打开 SQL LAB。安装包暂未使用发布者证书，Windows 可能显示“未知发布者”；[发布页](https://github.com/MarikoAkina/sql-lab/releases/tag/v1.1.0)提供 SHA256 校验文件与安装检查报告。
 
 网页已开放为公开试用。数据仍分别保存在各自浏览器，不会自动跨设备同步。自行部署和本地运行见 [开发指南](docs/development.md)。
 
-0.3.1 及以前需先手动安装一次 1.0.4；以后可用顶部或帮助菜单“检查更新”。AWS 试用站的部署命令见 [更新与部署指南](docs/updates.md)。 现提供服务器自动更新器，一次安装后每约 10 分钟校验并部署 GitHub 新版；网页按钮加载已部署的版本。[安装自动更新器](docs/updates.md#让试用站以后自动部署新版推荐)。
+0.3.1 及以前需先手动安装一次 1.1.0；以后可用顶部或帮助菜单“检查更新”。AWS 试用站的部署命令见 [更新与部署指南](docs/updates.md)。 现提供服务器自动更新器，一次安装后每约 10 分钟校验并部署 GitHub 新版；网页按钮加载已部署的版本。[安装自动更新器](docs/updates.md#让试用站以后自动部署新版推荐)。
 
 ## 界面预览
 
@@ -136,16 +136,16 @@ SQL 使用 **node-sql-parser 的 MySQL AST 与自有结构化执行器**，金�
 
 ## 验证状态
 
-1.0.4 手机上下同屏、面板调节与详细讲解见 [新版使用说明](docs/learning-1.0.md)。原 45 题答案、ID 与判题规则保留。
+1.1.0 手机上下同屏、面板调节与详细讲解见 [新版使用说明](docs/learning-1.0.md)。原 45 题答案、ID 与判题规则保留。
 
 
-**1.0.4 源码验收：193 项自动化检查通过，0 项失败。** Windows 安装检查由发布工作流单独执行，结果见发布报告。
+**1.1.0 源码验收：220 项自动化检查通过，0 项失败。** Windows 安装检查由发布工作流单独执行，结果见发布报告。
 
 历史 0.4.0 已完成真实 Windows **0.3.3 → 0.4.0** 自动升级验收，**8 项全部通过**。确认下载、安装、自动重启及客户数据、脚本、练习进度恢复；新版 45 题及独立示例/预期输出正常。[0.4.0 升级报告](public/windows-upgrade-acceptance-0.4.json) · [工作流](https://github.com/MarikoAkina/sql-lab/actions/runs/40265313715)。
 
 已补齐公开版本 **0.3.2 → 0.3.3** 的 Windows CI 自动升级验收，**7 项通过**：使用真实安装包和 GitHub 更新源，点击应用内按钮，确认自动下载安装与重新启动，并恢复客户数据、SQL 草稿和练习进度。[升级报告](public/windows-upgrade-acceptance.json) · [工作流记录](https://github.com/MarikoAkina/sql-lab/actions/runs/40260121753)。
 
-查看 [仓库测试报告](public/test-report.json)、[Windows 发布报告](https://github.com/MarikoAkina/sql-lab/releases/download/v1.0.4/desktop-smoke.json)和 [GitHub Actions](https://github.com/MarikoAkina/sql-lab/actions)。测试组成、检查命令和报告边界见 [测试与验收](docs/testing.md)。
+查看 [仓库测试报告](public/test-report.json)、[Windows 发布报告](https://github.com/MarikoAkina/sql-lab/releases/download/v1.1.0/desktop-smoke.json)和 [GitHub Actions](https://github.com/MarikoAkina/sql-lab/actions)。测试组成、检查命令和报告边界见 [测试与验收](docs/testing.md)。
 
 尚未完成真实 MySQL 8.4 服务器逐条对照，以及真实 iPhone Safari、虚拟键盘与触控流程验收。本轮 Chromium 五种宽度及 300px 可视高度的键盘模拟检查见 [练习更新记录](docs/learning-0.4.md)；模拟检查不等同于 Safari 实机验证。
 

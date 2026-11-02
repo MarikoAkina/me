@@ -6,6 +6,8 @@ import {indexedDB,IDBKeyRange} from 'fake-indexeddb';
 import assert from 'node:assert/strict';
 const cases=[];const test=(name,fn)=>cases.push({name,fn});let cleanup;test.after=fn=>cleanup=fn;
 import fs from 'node:fs/promises';
+const currentVersion=JSON.parse(await fs.readFile(new URL('../package.json',import.meta.url))).version;
+const nextVersion=currentVersion.split('.').map((n,i)=>Number(n)+(i===2?1:0)).join('.');
 await fs.mkdir('tests/.cache',{recursive:true});
 await build({entryPoints:['tests/ui-entry.jsx'],bundle:true,format:'esm',platform:'node',outfile:'tests/.cache/ui.mjs',jsx:'automatic',logLevel:'silent'});
 await build({entryPoints:['tests/ui-worker-entry.mjs'],bundle:true,format:'esm',platform:'node',outfile:'tests/.cache/worker.mjs',logLevel:'silent'});
@@ -52,15 +54,15 @@ test('卸载再挂载等价刷新：数据、草稿、历史、进度恢复',asy
 async function chooseFile(name,text){const input=document.querySelector('input[type=file]');Object.defineProperty(input,'files',{value:[{name,size:new TextEncoder().encode(text).length,text:async()=>text}],configurable:true});await act(async()=>input.dispatchEvent(new window.Event('change',{bubbles:true})));}
 test('SQL 文件失败导入全部回退，合法文件可导入',async()=>{await click(byText('数据与备份'));await click(byText('导入 .sql 文件'));await chooseFile('bad.sql',"INSERT INTO customers(name) VALUES('应回退'); SELECT wrong FROM customers;");await waitFor(()=>document.querySelector('[role=alertdialog]'));await click(byText('确认导入'));await waitFor(()=>document.querySelector('.log-entry.failed'));assert.equal(document.querySelector('.tree-table .table-row small').textContent,'6');await click(byText('数据与备份'));await click(byText('导入 .sql 文件'));await chooseFile('good.sql',"INSERT INTO customers(name) VALUES('导入成功'); SELECT COUNT(*) FROM customers;");await waitFor(()=>document.querySelector('[role=alertdialog]'));await click(byText('确认导入'));await waitFor(()=>document.querySelector('.tree-table .table-row small')?.textContent==='7');assert.ok(EditorView.findFromDOM(document.querySelector('.cm-editor')).state.doc.toString().includes('导入成功'));});
 test('完整备份恢复实际替换数据库与脚本，损坏备份拒绝',async()=>{const {loadWorkspace,backupEnvelope}=await import('../lib/storage.mjs');await tick(400);const backup=backupEnvelope(await loadWorkspace());backup.workspace.db.databases.finance_lab.tables.customers.rows[0].city='恢复城市';backup.workspace.tabs[0].sql='SELECT 88 AS restored;';backup.workspace.activeTab=backup.workspace.tabs[0].id;await click(byText('数据与备份'));await click(byText('恢复 JSON 备份'));await chooseFile('restore.json',JSON.stringify(backup));await waitFor(()=>document.querySelector('[role=alertdialog]'));await click(byText('确认'));await waitFor(()=>EditorView.findFromDOM(document.querySelector('.cm-editor'))?.state.doc.toString().includes('restored'));await click(byText('数据与备份'));await click(byText('恢复 JSON 备份'));await chooseFile('broken.json','{"bad":true}');await waitFor(()=>document.querySelector('.toast')?.textContent.includes('无法导入'));assert.equal(document.querySelector('[role=alertdialog]'),null);await click(document.querySelector('[data-slot=dialog-close]'));});
-test('Windows 安装入口和下载链接可在数据面板打开',async()=>{await click(byText('数据与备份'));await click(byText('下载 Windows 安装版'));assert.ok(document.querySelector('.windows-download-dialog'));const link=document.querySelector('.windows-install-link');assert.ok(link.href.endsWith('/SQL-Lab-Setup-1.0.4.exe'));assert.equal(link.target,'_blank');assert.ok(document.querySelector('.windows-download-dialog').textContent.includes('JSON 备份'));await click(document.querySelector('[data-slot=dialog-close]'));});
+test('Windows 安装入口和下载链接可在数据面板打开',async()=>{await click(byText('数据与备份'));await click(byText('下载 Windows 安装版'));assert.ok(document.querySelector('.windows-download-dialog'));const link=document.querySelector('.windows-install-link');assert.ok(link.href.endsWith(`/SQL-Lab-Setup-${currentVersion}.exe`));assert.equal(link.target,'_blank');assert.ok(document.querySelector('.windows-download-dialog').textContent.includes('JSON 备份'));await click(document.querySelector('[data-slot=dialog-close]'));});
 test('网页检查按钮保存尚未延时落盘的草稿并显示最新状态',async()=>{
   const original=globalThis.fetch;
-  globalThis.fetch=async url=>({ok:true,json:async()=>String(url).includes('api.github.com')?{tag_name:'v1.0.4'}:{version:'1.0.4'}});
+  globalThis.fetch=async url=>({ok:true,json:async()=>String(url).includes('api.github.com')?{tag_name:'v'+currentVersion}:{version:currentVersion}});
   try{await inputSQL('SELECT 123 AS update_draft;');await click(byLabel('检查更新'));await waitFor(()=>document.querySelector('.update-status')?.textContent.includes('未落后'));const {loadWorkspace}=await import('../lib/storage.mjs');assert.ok((await loadWorkspace()).tabs.some(t=>t.sql==='SELECT 123 AS update_draft;'));await click(document.querySelector('[data-slot=dialog-close]'));}finally{globalThis.fetch=original;}
 });
 test('GitHub 新版但站点未部署时明确提示管理员部署',async()=>{
-  const original=globalThis.fetch;globalThis.fetch=async url=>({ok:true,json:async()=>String(url).includes('api.github.com')?{tag_name:'v1.0.5'}:{version:'1.0.4'}});
-  try{await click(byLabel('检查更新'));await waitFor(()=>document.querySelector('.update-status')?.textContent.includes('需管理员先部署'));assert.ok(document.querySelector('.update-status').textContent.includes('1.0.5'));await click(document.querySelector('[data-slot=dialog-close]'));}finally{globalThis.fetch=original;}
+  const original=globalThis.fetch;globalThis.fetch=async url=>({ok:true,json:async()=>String(url).includes('api.github.com')?{tag_name:'v'+nextVersion}:{version:currentVersion}});
+  try{await click(byLabel('检查更新'));await waitFor(()=>document.querySelector('.update-status')?.textContent.includes('需管理员先部署'));assert.ok(document.querySelector('.update-status').textContent.includes(nextVersion));await click(document.querySelector('[data-slot=dialog-close]'));}finally{globalThis.fetch=original;}
 });
 test('更新网络失败后保留草稿并可再次检查',async()=>{
   const original=globalThis.fetch;globalThis.fetch=async()=>{throw new Error('offline');};
@@ -68,7 +70,7 @@ test('更新网络失败后保留草稿并可再次检查',async()=>{
 });
 test('桌面保存最新草稿后才调用安装，安装异步失败后可再次重试',async()=>{
   await unmount();let installCount=0, updateListener;
-  window.sqlLabUpdates={getState:async()=>({phase:'idle',currentVersion:'1.0.4'}),subscribe:callback=>{updateListener=callback;return()=>{};},onCheckRequested:()=>()=>{},check:async()=>({phase:'ready',version:'1.0.5'}),install:async()=>{const {loadWorkspace}=await import('../lib/storage.mjs');assert.ok((await loadWorkspace()).tabs.some(t=>t.sql==='SELECT 456 AS before_install;'));installCount++;return {phase:'installing'};}};
+  window.sqlLabUpdates={getState:async()=>({phase:'idle',currentVersion:currentVersion}),subscribe:callback=>{updateListener=callback;return()=>{};},onCheckRequested:()=>()=>{},check:async()=>({phase:'ready',version:nextVersion}),install:async()=>{const {loadWorkspace}=await import('../lib/storage.mjs');assert.ok((await loadWorkspace()).tabs.some(t=>t.sql==='SELECT 456 AS before_install;'));installCount++;return {phase:'installing'};}};
   try{await mount();await waitFor(()=>document.querySelector('.cm-editor'));await inputSQL('SELECT 456 AS before_install;');await click(byLabel('检查更新'));await waitFor(()=>installCount===1);assert.equal(installCount,1);await act(async()=>updateListener({phase:'error',message:'模拟安装失败'}));await tick();await click(byText('再次检查'));await waitFor(()=>installCount===2);assert.equal(installCount,2);}finally{await unmount();delete window.sqlLabUpdates;await mount();await waitFor(()=>document.querySelector('.cm-editor'));}
 });
 test('每题展示初始示例与预期查询结果，工作台修改不污染练习',async()=>{
@@ -119,6 +121,14 @@ test('初代原生补全：表别名字段使用默认图标，没有自定义�
 });
 test('初代输入自动补全与Enter填入恢复，保留原生文本框选',async()=>{
  await inputSQL('SE');const view=EditorView.findFromDOM(document.querySelector('.cm-editor'));await act(async()=>{view.focus();view.dispatch({selection:{anchor:2}});view.dispatch({changes:{from:2,insert:'L'},selection:{anchor:3},userEvent:'input.type'});});await waitFor(()=>document.querySelector('.cm-tooltip-autocomplete'));await tick(150);await act(async()=>document.querySelector('.cm-content').dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',code:'Enter',bubbles:true,cancelable:true})));assert.equal(view.state.doc.toString(),'select');assert.equal(document.querySelector('.cm-selectionLayer'),null);
+});
+test('新增字段经实际 Worker 建表写入、树形结构显示并刷新恢复',async()=>{
+ await inputSQL("CREATE DATABASE field_lab; USE field_lab; CREATE TABLE people (id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, code CHAR(4), name VARCHAR(20), active BOOL DEFAULT TRUE, note TINYTEXT); INSERT INTO people(id,code,name) VALUES(9007199254740993,'A  ','张同学'); SELECT id,code,name,active FROM people;");
+ await click(byText('执行全部'));await waitFor(()=>document.querySelector('.result-grid')?.textContent.includes('9007199254740993'));
+ assert.equal(document.querySelectorAll('.result-grid tbody tr').length,1);assert.ok(document.querySelector('.result-grid').textContent.includes('张同学'));
+ await click(byLabel('展开 field_lab'));await click([...document.querySelectorAll('.tree-table .table-row')].find(b=>b.textContent.includes('people')));
+ assert.ok(document.querySelector('.schema-sidebar').textContent.includes('BIGINT UNSIGNED'));assert.ok(document.querySelector('.schema-sidebar').textContent.includes('CHAR(4)'));assert.ok(document.querySelector('.schema-sidebar').textContent.includes('TINYINT(1)'));
+ await tick(400);await unmount();await mount();await waitFor(()=>document.querySelector('.cm-editor'));await inputSQL("INSERT INTO people(code,name) VALUES('B','李同学'); SELECT MAX(id),COUNT(*) FROM people;");await click(byText('执行全部'));await waitFor(()=>document.querySelector('.result-grid')?.textContent.includes('9007199254740994'));assert.ok(document.querySelector('.result-grid').textContent.includes('2'));
 });
 test.after(async()=>{await unmount();dom.window.close();});
 

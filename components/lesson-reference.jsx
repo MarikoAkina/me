@@ -1,6 +1,7 @@
 "use client";
+import {columnTypeLabel} from '@/lib/sql/column-types.mjs';
 const text=v=>v===null?'NULL':v&&typeof v==='object'&&'decimal' in v?v.decimal:String(v);
-const type=c=>c.type==='VARCHAR'?`VARCHAR(${c.length})`:c.type==='DECIMAL'?`DECIMAL(${c.precision},${c.scale})`:c.type;
+const type=columnTypeLabel;
 
 function DataGrid({columns,rows,label}){
  return <div className="lesson-table-scroll" tabIndex={0} role="region" aria-label={label}><table className="lesson-data-grid"><caption>{label} · {rows.length} 行</caption><thead><tr>{columns.map((c,i)=><th key={i} scope="col">{c}</th>)}</tr></thead><tbody>{rows.map((row,i)=><tr key={i}>{row.map((v,j)=><td key={j} className={v===null?'lesson-null':''}>{v===null?<em>NULL</em>:v===''?<span className="empty-cell">空字符串</span>:text(v)}</td>)}</tr>)}</tbody></table>{!rows.length&&<p className="lesson-empty">0 行，表中没有记录。</p>}</div>;

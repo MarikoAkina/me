@@ -15,7 +15,7 @@ SQL 在 Web Worker 中执行，金额使用 decimal.js 的 80 位十进制运算
 | 数据库管理 | `CREATE DATABASE`、`SHOW DATABASES`、`USE`、`DROP DATABASE`；创建支持 `IF NOT EXISTS`，删除支持 `IF EXISTS` |
 | 表管理 | `CREATE TABLE`、`SHOW TABLES`、`DESC` / `DESCRIBE`、`DROP TABLE`；创建支持 `IF NOT EXISTS`，删除支持 `IF EXISTS` |
 | 修改表 | `ALTER TABLE ... ADD COLUMN`、`MODIFY COLUMN`、`DROP COLUMN` 的基础用法 |
-| 类型 | `INT` / `INTEGER`、`VARCHAR(n)`、`TEXT`、`DECIMAL(p,s)`、`DATE`、`DATETIME` |
+| 类型 | `CHAR(n)`、`VARCHAR(n)`、`TINYTEXT` / `TEXT` / `MEDIUMTEXT` / `LONGTEXT`；`TINYINT` / `SMALLINT` / `MEDIUMINT` / `INT` / `INTEGER` / `BIGINT`；`BOOL` / `BOOLEAN`；`DECIMAL` / `DEC` / `FIXED` / `NUMERIC`；`DATE`、`DATETIME`。数字列支持 `UNSIGNED` |
 | 约束 | 单列 `PRIMARY KEY`、单列 `UNIQUE`、`NOT NULL`、常量 `DEFAULT`、整数主键 `AUTO_INCREMENT` |
 | 插入 | `INSERT INTO ... VALUES ...`，支持指定列、多行插入和基础 `DEFAULT` 值 |
 | 修改与删除 | 单表 `UPDATE ... SET ... WHERE ...`、`DELETE FROM ... WHERE ...`、`TRUNCATE TABLE` |
@@ -29,6 +29,12 @@ SQL 在 Web Worker 中执行，金额使用 decimal.js 的 80 位十进制运算
 | 金额与取整 | `ROUND`、`ABS`、`CEIL` / `CEILING`、`FLOOR`、`MOD` |
 | 文本函数 | `CONCAT`、`UPPER`、`LOWER`、`LENGTH`、`CHAR_LENGTH` / `CHARACTER_LENGTH`、`TRIM`、`LTRIM`、`RTRIM`、`LEFT`、`RIGHT`、`SUBSTRING` / `SUBSTR`、`REPLACE` |
 | 日期函数 | `YEAR`、`MONTH`、`DAY` / `DAYOFMONTH`、`QUARTER`、`DATE`、`DATEDIFF`、`DATE_FORMAT` |
+
+## 建表字段类型
+
+1.1.0 扩展了字符、整数、布尔与文本类型，详见 [字段类型与建表示例](column-types.md)。CHAR 默认长度 1、最大 255 个字符，读取时不保留末尾普通空格；VARCHAR 保留末尾空格。TINYTEXT / TEXT 按 UTF-8 字节限制；MEDIUMTEXT / LONGTEXT 仍受单值 200,000 个 UTF-16 代码单元的学习容量限制。BIGINT 的数据、自增与运算使用十进制精确值，不经过 JavaScript 浮点数。
+
+BOOL / BOOLEAN 是 TINYINT(1) 的同义写法，允许 -128～127；显示宽度不是位数约束。字段浏览器、DESC 和 SQL 导出显示规范化类型。FLOAT / DOUBLE / REAL、二进制、ENUM / SET、JSON、TIME / YEAR / TIMESTAMP、字符集/排序规则、ZEROFILL 与小数秒不在本轮实现范围内。现有严格类型转换、字符串比较和单条失败回退规则继续适用。
 
 ## 首轮函数扩展的边界
 

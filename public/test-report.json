@@ -1,10 +1,10 @@
 {
   "product": "SQL LAB · MySQL 基础学习模拟器",
-  "version": "1.0.4",
-  "testedAt": "2026-10-28T09:01:30.688303+08:00",
+  "version": "1.1.0",
+  "testedAt": "2026-11-02T09:36:15.913976+08:00",
   "summary": {
-    "tests": 193,
-    "pass": 193,
+    "tests": 220,
+    "pass": 220,
     "fail": 0
   },
   "suites": [
@@ -159,8 +159,8 @@
     },
     {
       "suite": "DOM 页面集成",
-      "tests": 30,
-      "pass": 30,
+      "tests": 31,
+      "pass": 31,
       "fail": 0,
       "cases": [
         "工作台实际挂载，首次 SELECT 返回 5 位客户",
@@ -192,7 +192,8 @@
         "手机键盘高度与平移变化保持可执行，收起后恢复导航状态",
         "手机参考面板可切换结果并保存高度，所有题目都有详细讲解",
         "初代原生补全：表别名字段使用默认图标，没有自定义主键标识",
-        "初代输入自动补全与Enter填入恢复，保留原生文本框选"
+        "初代输入自动补全与Enter填入恢复，保留原生文本框选",
+        "新增字段经实际 Worker 建表写入、树形结构显示并刷新恢复"
       ]
     },
     {
@@ -256,6 +257,20 @@
         "failed data save prevents installing or reloading",
         "update manifest hashes describe the final installer and are re-readable"
       ]
+    },
+    {
+      "suite": "建表字段类型",
+      "tests": 26,
+      "pass": 26,
+      "fail": 0,
+      "cases": [
+        "CHAR/VARCHAR 码点长度、尾空格、唯一约束及写入回退",
+        "五类整数的有符号/UNSIGNED 范围、显示宽度、布尔与 DECIMAL 别名",
+        "TEXT 的 UTF-8 字节容量与模拟器单值上限",
+        "BIGINT 精确自增、更新、溢出与 TRUNCATE",
+        "ALTER 转换失败回退、SQL/JSON/IndexedDB 往返与损坏备份",
+        "类型别名词法适配、错误位置、未支持类型提示"
+      ]
     }
   ],
   "responsiveWidths": [
@@ -265,13 +280,14 @@
     768,
     1280
   ],
-  "responsiveVerification": "1.0.4 真实 Chromium 开发 iframe 检查 375/390/430/768/1280px，页面宽度与视口一致；390px 实际自动补全、Enter 接受、执行批改通过，300px/36px 键盘模拟已查看截图。不是 iPhone Safari 实机。",
+  "responsiveVerification": "1.1.0 Chromium 开发 iframe 实测 375/390/430/768/1280px，页面宽度等于视口；新字段学生表可执行、长整数准确，宽结果在自己的区域滚动；已查看实际截图。不是 Safari 实机。",
   "largeDataset": "SQL 核心检查包含 5000 行查询与聚合；本轮未调整容量限制。",
   "engine": "MySQL AST + structured execution + decimal.js",
   "limitations": [
-    "真实 iPhone Safari 系统选区和中文输入法尚待实机回归",
-    "1.0.4 Windows 安装检查以本版本 Release 报告为准；历史升级报告不等于本版本升级验收",
-    "真实 MySQL 8.4 差分仍未完成",
-    "原生候选字形取决于设备字体；字段图标不代表真实主键，MySQL 词典候选不等于模拟器支持范围"
+    "真实 iPhone Safari 与中文输入法未实机验证",
+    "真实 MySQL 8.4 差分未完成；参考官方类型文档及固定边界值验证",
+    "FLOAT/DOUBLE/REAL、二进制、ENUM/SET、JSON、TIME/YEAR/TIMESTAMP 未实现",
+    "TEXT 校验 65535 个 UTF-8 字节；MEDIUMTEXT/LONGTEXT 受模拟器容量限制；新类型备份不能导入旧版",
+    "Windows 安装验证以本版本 Release 报告为准；历史完整升级记录不是本版升级验收"
   ]
 }
